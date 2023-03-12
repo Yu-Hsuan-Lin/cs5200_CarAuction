@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class ConnectionManager {
 	private final String user = "root";
-	private final String password = "Ahuang002649975@";
+	private final String password = "";
 	private final String hostName = "localhost";
 	private final int port= 3306;
 	private final String schema = "CarAuction";
