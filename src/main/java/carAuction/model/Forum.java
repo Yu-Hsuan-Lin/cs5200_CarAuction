@@ -16,6 +16,17 @@ public class Forum {
 		this.timeStamp = timeStamp;
 		this.content = content;
 	}
+	
+	public Forum(String forumID) {
+		this.forumID = forumID;
+	}
+	
+	public Forum(Auction auction, Users user, Date timeStamp, String content) {
+		this.auction = auction;
+		this.user = user;
+		this.timeStamp = timeStamp;
+		this.content = content;
+	}
 
 	public String getForumID() {
 		return forumID;

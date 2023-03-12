@@ -21,7 +21,16 @@ public class UserActivity {
 		this.activityType = activityType;
 		this.timeStamp = timeStamp;
 	}
-
+	
+	public UserActivity(String activityID) {
+		this.activityID = activityID;
+	}
+	
+	public UserActivity(Users user, ActivityType activityType, Date timeStamp) {
+		this.user = user;
+		this.activityType = activityType;
+		this.timeStamp = timeStamp;
+	}
 
 	public String getActivityID() {
 		return activityID;

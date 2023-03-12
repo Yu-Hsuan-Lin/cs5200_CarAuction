@@ -16,6 +16,17 @@ public class Reply {
 		this.timeStamp = timeStamp;
 		this.content = content;
 	}
+	
+	public Reply(String replyID) {
+		this.replyID = replyID;
+	}
+	
+	public Reply(Forum forum, Users user, Date timeStamp, String content) {
+		this.forum = forum;
+		this.user = user;
+		this.timeStamp = timeStamp;
+		this.content = content;
+	}
 
 	public String getReplyID() {
 		return replyID;
