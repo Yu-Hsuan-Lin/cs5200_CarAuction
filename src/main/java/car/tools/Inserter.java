@@ -68,6 +68,7 @@ public class Inserter {
 		
 		// UPDATE
 		
+		usersDao.updatepassword(user1, "123***");
 		creditCardsDao.updateNameOnCard(creditCard1, "Bella");
 		
 		

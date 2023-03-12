@@ -122,6 +122,38 @@ public class UsersDao {
 		}
 		return null;
 	}
+	
+	/**
+	 * Update the password of the Persons instance.
+	 * This runs a UPDATE statement.
+	 */
+	
+	public Users updatepassword(Users user, String newpassword) throws SQLException {
+		String updateUser = "UPDATE Users SET password=? WHERE UserID=?;";
+		Connection connection = null;
+		PreparedStatement updateStmt = null;
+		try {
+			connection = connectionManager.getConnection();
+			updateStmt = connection.prepareStatement(updateUser);
+			updateStmt.setString(1, newpassword);
+			updateStmt.setString(2, user.getUserID());
+			updateStmt.executeUpdate();
+			
+			// Update the person param before returning to the caller.
+			user.setLastName(newpassword);
+			return user;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(updateStmt != null) {
+				updateStmt.close();
+			}
+		}
+	}
 
 	/**
 	 * Delete the Users instance.
