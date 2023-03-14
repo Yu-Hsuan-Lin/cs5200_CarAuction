@@ -246,6 +246,51 @@ public class Inserter {
 		
 		
 		// Bid inserter
+		// DAO instances.
+		BidDao bidDao = BidDao.getInstance();
+		
+		// INSERT objects from our model.
+		String inputString = "2015-02-17";
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date inputDate = formatter.parse(inputString);
+		String inputString2 = "2015-03-17";
+		Date inputDate2 = formatter.parse(inputString2);
+		String bidtimeSrting = "2015-02-24";
+		Date bidtime = formatter.parse(bidtimeSrting);
+		String userSrting = "2015-01-24";
+		Date userDate = formatter.parse(userSrting);
+//		Auction auction = new Auction("1", "kia-a", inputDate, inputDate2, "54", "45", "kiakia", "https://www.pc", (float) 4000, (float) 4000, Auction.AuctionStatusValue.Failed, "5", true);
+//		Users user1 = new Users("10000", "first1", "last1", "user1 Address1", 
+//                "user1 Address2", "user1 City", "WA",
+//                "00000", "US", "user1@northeastern.edu", "***123", "000-000-0000", userDate);
+		
+		Bid bid = new Bid("99001", auctionDao.getAuctionById("1"), usersDao.getUserFromuserID("1"), bidtime, (float)4500);
+		bid = bidDao.create(bid);
+		CustomerService cs1 = new CustomerService("100002", "Bill", "K");
+		cs1 = customerServiceDao.create(cs1);
+		
+		// READ
+		// Bid
+		Bid bidRead = bidDao.getBidById("99001");
+		System.out.format("Reading bidById: bidID:%s bidPrice:%s \n",
+				bidRead.getBidID(), bidRead.getBidPrice());
+		
+		List<Bid> bidRead2 = bidDao.getBidForUser(usersDao.getUserFromuserID("1"));
+		for (Bid bidR : bidRead2) {
+			System.out.format("Reading bidForUser: bidID:%s bidPrice:%s \n",
+					bidR.getBidID(), bidR.getBidPrice());
+		}
+		List<Bid> bidRead3 = bidDao.getBidForAuction(auctionDao.getAuctionById("1"));
+		for (Bid bidR : bidRead3) {
+			System.out.format("Reading bidForAuction: bidID:%s bidPrice:%s \n",
+					bidR.getBidID(), bidR.getBidPrice());
+		}
+		// UPDATE
+		Bid bidUpdate = bidDao.updateBidPrice(bid, (float) 5400);
+		System.out.format("Reading bidUpdate: bidID:%s bidPrice:%s \n",
+				bidUpdate.getBidID(), bidUpdate.getBidPrice());
+		// DELETE
+		bidDao.delete(bid);
 		
 		// ChatHistory inserter
 		
