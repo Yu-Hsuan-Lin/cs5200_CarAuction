@@ -1,7 +1,7 @@
-package car.tools;
+package carAuction.tools;
 
-import car.dal.*;
-import car.model.*;
+import carAuction.dal.*;
+import carAuction.model.*;
 
 import java.sql.SQLException;
 import java.util.Date;

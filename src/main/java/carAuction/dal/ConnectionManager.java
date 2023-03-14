@@ -1,4 +1,4 @@
-package car.dal;
+package carAuction.dal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

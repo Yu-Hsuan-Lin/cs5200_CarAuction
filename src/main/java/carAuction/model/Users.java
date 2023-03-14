@@ -1,4 +1,4 @@
-package car.model;
+package carAuction.model;
 
 import java.util.Date;
 

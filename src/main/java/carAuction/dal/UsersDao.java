@@ -1,4 +1,4 @@
-package car.dal;
+package carAuction.dal;
 
 import car.model.*;
 

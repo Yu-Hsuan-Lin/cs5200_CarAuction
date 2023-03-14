@@ -1,4 +1,4 @@
-package car.model;
+package carAuction.model;
 
 public class CreditCards {
     protected String CardNumber;
