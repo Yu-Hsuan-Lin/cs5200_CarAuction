@@ -7,43 +7,43 @@ public class Auction {
 	protected String Title;
 	protected Date StartTime;
 	protected Date EndTime;
-	protected String CarID;
-	protected String UserID;
+	protected Car car;
+	protected Users user;
 	protected String Highlights;
 	protected String Pictures;
 	protected Float MinimumPrice;
 	protected Float CurrentHighestPrice;
 	protected AuctionStatusValue AuctionStatus;
-	protected String CustomerServiceID;
+	protected CustomerService customerService;
 	protected Boolean PriceChangeAlert;
 	
 	public enum AuctionStatusValue {
 		Active, Failed, Succeed
 	}
 
-	public Auction(String auctionID, String title, Date startTime, Date endTime, String carID, String userID,
+	public Auction(String auctionID, String title, Date startTime, Date endTime, Car car, Users user,
 			String highlights, String pictures, Float minimumPrice, Float currentHighestPrice,
-			AuctionStatusValue auctionStatus, String customerServiceID, Boolean priceChangeAlert) {
+			AuctionStatusValue auctionStatus, CustomerService customerService, Boolean priceChangeAlert) {
 		this.AuctionID = auctionID;
 		this.Title = title;
 		this.StartTime = startTime;
 		this.EndTime = endTime;
-		this.CarID = carID;
-		this.UserID = userID;
+		this.car = car;
+		this.user = user;
 		this.Highlights = highlights;
 		this.Pictures = pictures;
 		this.MinimumPrice = minimumPrice;
 		this.CurrentHighestPrice = currentHighestPrice;
 		this.AuctionStatus = auctionStatus;
-		this.CustomerServiceID = customerServiceID;
+		this.customerService = customerService;
 		this.PriceChangeAlert = priceChangeAlert;
 	}
 
-	public Auction(String auctionID, String carID, String userID, String customerServiceID) {
+	public Auction(String auctionID, Car car, Users user, CustomerService customerService) {
 		this.AuctionID = auctionID;
-		this.CarID = carID;
-		this.UserID = userID;
-		this.CustomerServiceID = customerServiceID;
+		this.car = car;
+		this.user = user;
+		this.customerService = customerService;
 	}
 
 	public String getAuctionID() {
@@ -78,20 +78,20 @@ public class Auction {
 		this.EndTime = endTime;
 	}
 
-	public String getCarID() {
-		return this.CarID;
+	public Car getCar() {
+		return this.car;
 	}
 
-	public void setCarID(String carID) {
-		this.CarID = carID;
+	public void setCar(Car car) {
+		this.car = car;
 	}
 
-	public String getUserID() {
-		return this.UserID;
+	public Users getUser() {
+		return this.user;
 	}
 
-	public void setUserID(String userID) {
-		this.UserID = userID;
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 	public String getHighlights() {
@@ -134,12 +134,12 @@ public class Auction {
 		this.AuctionStatus = auctionStatus;
 	}
 
-	public String getCustomerServiceID() {
-		return this.CustomerServiceID;
+	public CustomerService getCustomerService() {
+		return this.customerService;
 	}
 
-	public void setCustomerServiceID(String customerServiceID) {
-		this.CustomerServiceID = customerServiceID;
+	public void setCustomerService(CustomerService customerService) {
+		this.customerService = customerService;
 	}
 
 	public Boolean getPriceChangeAlert() {

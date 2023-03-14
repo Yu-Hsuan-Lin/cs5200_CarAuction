@@ -2,7 +2,7 @@ package carAuction.model;
 
 public class Car {
 	protected String CarID;
-	protected String UserID;
+	protected Users user;
 	protected Integer Year;
 	protected String Maker;
 	protected String Model;
@@ -17,11 +17,11 @@ public class Car {
 	protected String Interior;
 	protected Integer MMR;
 	
-	public Car(String carID, String userID, Integer year, String maker, String model, String trim, String body,
+	public Car(String carID, Users user, Integer year, String maker, String model, String trim, String body,
 			String transmission, String vIN, String state, Float conditionScore, Integer odoMeter, String color,
 			String interior, Integer mMR) {
 		this.CarID = carID;
-		this.UserID = userID;
+		this.user = user;
 		this.Year = year;
 		this.Maker = maker;
 		this.Model = model;
@@ -37,10 +37,10 @@ public class Car {
 		this.MMR = mMR;
 	}
 	
-	public Car(String carID, String userID) {
+	public Car(String carID, Users user) {
 		super();
 		this.CarID = carID;
-		this.UserID = userID;
+		this.user = user;
 	}
 	
 	public String getCarID() {
@@ -51,12 +51,12 @@ public class Car {
 		this.CarID = carID;
 	}
 	
-	public String getUserID() {
-		return this.UserID;
+	public Users getUser() {
+		return this.user;
 	}
 	
-	public void setUserID(String userID) {
-		this.UserID = userID;
+	public void setUser(Users user) {
+		this.user = user;
 	}
 	
 	public Integer getYear() {
