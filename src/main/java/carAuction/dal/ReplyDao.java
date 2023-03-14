@@ -30,29 +30,31 @@ public class ReplyDao {
     
 	public Reply create(Reply reply) throws SQLException {
 		String insertReply =
-			"INSERT INTO Reply(ForumID,UserID,TimeStamp,Content) " +
-			"VALUES(?,?,?,?);";
+			"INSERT INTO Reply(ReplyID,ForumID,UserID,TimeStamp,Content) " +
+			"VALUES(?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
-		ResultSet resultKey = null;
+//		ResultSet resultKey = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertReply, Statement.RETURN_GENERATED_KEYS);
+			insertStmt = connection.prepareStatement(insertReply);
 			
-			insertStmt.setString(1, reply.getForum().getForumID());
-			insertStmt.setString(2, reply.getUser().getUserID());
-			insertStmt.setTimestamp(3, new Timestamp(reply.getTimeStamp().getTime()));
-			insertStmt.setString(4, reply.getContent());
+			insertStmt.setString(1, reply.getReplyID());
+			insertStmt.setString(2, reply.getForum().getForumID());
+			insertStmt.setString(3, reply.getUser().getUserID());
+			insertStmt.setTimestamp(4, new Timestamp(reply.getTimeStamp().getTime()));
+			insertStmt.setString(5, reply.getContent());
 			insertStmt.executeUpdate();
 			
-			resultKey = insertStmt.getGeneratedKeys();
-			String replyID = "-1";
-			if(resultKey.next()) {
-				replyID = resultKey.getString(1);
-			} else {
-				throw new SQLException("Unable to retrieve auto-generated key.");
-			}
-			reply.setReplyID(replyID);
+//			resultKey = insertStmt.getGeneratedKeys();
+//			String replyID = "-1";
+//			if(resultKey.next()) {
+//				replyID = resultKey.getString(1);
+//			} else {
+//				throw new SQLException("Unable to retrieve auto-generated key.");
+//			}
+//			reply.setReplyID(replyID);
+			
 			return reply;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -63,9 +65,6 @@ public class ReplyDao {
 			}
 			if(insertStmt != null) {
 				insertStmt.close();
-			}
-			if(resultKey != null) {
-				resultKey.close();
 			}
 		}
 	}
@@ -100,7 +99,7 @@ public class ReplyDao {
 	}
 
 	public Reply updateReply(Reply reply, String newContent) throws SQLException {
-		String updateReply = "UPDATE Forum SET Content=?,Created=? WHERE ReplyID=?;";
+		String updateReply = "UPDATE Reply SET Content=?,TimeStamp=? WHERE ReplyID=?;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {

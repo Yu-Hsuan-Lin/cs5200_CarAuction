@@ -29,31 +29,31 @@ public class ForumDao {
 	
 	public Forum create(Forum forum) throws SQLException {
 		String insertForum =
-			"INSERT INTO Forum(AuctionID,UserID,TimeStamp,Content) " +
-			"VALUES(?,?,?,?);";
+			"INSERT INTO Forum(ForumID,AuctionID,UserID,TimeStamp,Content) " +
+			"VALUES(?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
-		ResultSet resultKey = null;
+//		ResultSet resultKey = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertForum,
-				Statement.RETURN_GENERATED_KEYS);
+			insertStmt = connection.prepareStatement(insertForum);
 			
-			//!!!-----------no auction class yet-------------------!!!
-			insertStmt.setString(1, forum.getAuction().getAuctionID()); 
-			insertStmt.setString(2, forum.getUser().getUserID());
-			insertStmt.setTimestamp(3, new Timestamp(forum.getTimeStamp().getTime()));
-			insertStmt.setString(4, forum.getContent());
+			insertStmt.setString(1, forum.getForumID()); 
+			insertStmt.setString(2, forum.getAuction().getAuctionID()); 
+			insertStmt.setString(3, forum.getUser().getUserID());
+			insertStmt.setTimestamp(4, new Timestamp(forum.getTimeStamp().getTime()));
+			insertStmt.setString(5, forum.getContent());
 			insertStmt.executeUpdate();
 			
-			resultKey = insertStmt.getGeneratedKeys();
-			String forumID = "-1";
-			if(resultKey.next()) {
-				forumID = resultKey.getString(1);
-			} else {
-				throw new SQLException("Unable to retrieve auto-generated key.");
-			}
-			forum.setForumID(forumID);
+//			resultKey = insertStmt.getGeneratedKeys();
+//			String forumID = "-1";
+//			if(resultKey.next()) {
+//				forumID = resultKey.getString(1);
+//			} else {
+//				throw new SQLException("Unable to retrieve auto-generated key.");
+//			}
+//			forum.setForumID(forumID);
+			
 			return forum;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -64,9 +64,6 @@ public class ForumDao {
 			}
 			if(insertStmt != null) {
 				insertStmt.close();
-			}
-			if(resultKey != null) {
-				resultKey.close();
 			}
 		}
 	}
@@ -101,7 +98,7 @@ public class ForumDao {
 	}
 	
 	public Forum updateForum(Forum forum, String newContent) throws SQLException {
-		String updateForum = "UPDATE Forum SET Content=?,Created=? WHERE ForumID=?;";
+		String updateForum = "UPDATE Forum SET Content=?,TimeStamp=? WHERE ForumID=?;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {
@@ -144,13 +141,11 @@ public class ForumDao {
 			results = selectStmt.executeQuery();
 			UsersDao usersDao = UsersDao.getInstance();
 			
-			//!!!-----------no auction class yet-------------------!!!
 			AuctionDao auctionDao = AuctionDao.getInstance();
 			
 			if(results.next()) {
 				String resultForumID = results.getString("ForumID");
 				
-				//!!!-----------no auction class yet-------------------!!!
 				String auctionID = results.getString("AuctionID");
 				Auction auction = auctionDao.getAuctionById(auctionID);
 				
@@ -197,13 +192,11 @@ public class ForumDao {
 			selectStmt.setString(1, user.getUserID());
 			results = selectStmt.executeQuery();
 			
-			//!!!-----------no auction class yet-------------------!!!
 			AuctionDao auctionDao = AuctionDao.getInstance();
 			
 			while(results.next()) {
 				String resultForumID = results.getString("ForumID");
 				
-				//!!!-----------no auction class yet-------------------!!!
 				String auctionID = results.getString("AuctionID");
 				Auction auction = auctionDao.getAuctionById(auctionID);
 				
@@ -232,7 +225,6 @@ public class ForumDao {
 		return forums;
 	}
 
-	//!!!-----------no auction class yet-------------------!!!
 	public List<Forum> getForumForAuction(Auction auction) throws SQLException {
 		List<Forum> forums = new ArrayList<Forum>();
 		String selectForum =
@@ -253,7 +245,6 @@ public class ForumDao {
 			while(results.next()) {
 				String forumID = results.getString("ForumID");
 				
-				//!!!-----------no auction class yet-------------------!!!
 				String userID = results.getString("UserID");
 				Users user = userDao.getUserFromUserID(userID);
 				

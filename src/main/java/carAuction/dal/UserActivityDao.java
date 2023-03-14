@@ -30,10 +30,10 @@ public class UserActivityDao {
 		String insertUserActivity = "INSERT INTO UserActivity(ActivityID,UserID,ActivityType,TimeStamp) VALUES(?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
-		ResultSet resultKey = null;
+//		ResultSet resultKey = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertUserActivity, Statement.RETURN_GENERATED_KEYS);
+			insertStmt = connection.prepareStatement(insertUserActivity);
 			
 			insertStmt.setString(1, userActivity.getActivityID());
 			insertStmt.setString(2, userActivity.getUser().getUserID());

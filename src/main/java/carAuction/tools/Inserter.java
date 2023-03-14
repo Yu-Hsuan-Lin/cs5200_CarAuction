@@ -251,8 +251,93 @@ public class Inserter {
 		
 		// Collection inserter
 		
+		
+		
+		
+		
+		
 		// Forum inserter
+		ForumDao forumDao = ForumDao.getInstance();
+		
+		Forum forum1 = new Forum("1", auction1, user1, date, "forum1 content ............");
+		forum1 = forumDao.create(forum1);
+		
+		Forum forum2 = new Forum("2", auction2, user1, date, "forum2 content ............");
+		forum2 = forumDao.create(forum2);
+		
+		Forum forum3 = new Forum("3", auction3, user2, date, "forum3 content ............");
+		forum3 = forumDao.create(forum3);
+		
+		Forum forum4 = new Forum("4", auction4, user2, date, "forum4 content ............");
+		forum4 = forumDao.create(forum4);
+		
+		Forum forum5 = new Forum("5", auction4, user3, date, "forum5 content ............");
+		forum5 = forumDao.create(forum5);
+
+		
+		Forum f1 = forumDao.getForumById("3");
+		System.out.format("Reading Forum:  ID:%s   AuctionID:%s  UserID:%s  Time:%s  Content:%s  \n", 
+				f1.getForumID(), f1.getAuction().getAuctionID(), f1.getUser().getUserID(), f1.getTimeStamp(), f1.getContent());
+		
+		f1 = forumDao.updateForum(f1, "updated forum3 content...............");
+		System.out.format("Reading Updated Forum:  ID:%s   AuctionID:%s  UserID:%s  Time:%s  Content:%s  \n", 
+				f1.getForumID(), f1.getAuction().getAuctionID(), f1.getUser().getUserID(), f1.getTimeStamp(), f1.getContent());
+		
+		List<Forum> fList = forumDao.getForumForUser(user1);
+		for (Forum f : fList) {
+			System.out.format("Looping Forum for User %s:  forumID:%s,  AuctionID:%s,  Time:%s,  Content:%s    \n ",
+					f.getUser().getUserID(), f.getForumID(), f.getAuction().getAuctionID(), f.getTimeStamp(), f.getContent());
+		}
+		
+		List<Forum> fList1 = forumDao.getForumForAuction(auction4);
+		for (Forum f : fList1) {
+			System.out.format("Looping Forum for User %s:  forumID:%s,  AuctionID:%s,  Time:%s,  Content:%s    \n ",
+					f.getUser().getUserID(), f.getForumID(), f.getAuction().getAuctionID(), f.getTimeStamp(), f.getContent());
+		}
+		
+		System.out.println();
 		
 		// Reply inserter
+		
+		ReplyDao replyDao = ReplyDao.getInstance();
+		
+		Reply reply1 = new Reply("1", forum1, user3, date, "reply1 content ............");
+		reply1 = replyDao.create(reply1);
+		
+		Reply reply2 = new Reply("2", forum1, user2, date, "reply2 content ............");
+		reply2 = replyDao.create(reply2);
+		
+		Reply reply3 = new Reply("3", forum2, user1, date, "reply3 content ............");
+		reply3 = replyDao.create(reply3);
+				
+		Reply reply4 = new Reply("4", forum3, user3, date, "reply4 content ............");
+		reply4 = replyDao.create(reply4);
+		
+		
+		Reply r1 = replyDao.getReplyById("3");
+		System.out.format("Reading Reply:  ID:%s, ForumID:%s,  UserID:%s,  Time:%s,  Content:%s   \n ",
+				r1.getReplyID(), r1.getForum().getForumID(), r1.getUser().getUserID(), r1.getTimeStamp(), r1.getContent());
+		
+		r1 = replyDao.updateReply(r1, "updated reply3 content..........");
+		System.out.format("Reading Reply:  ID:%s, ForumID:%s,  UserID:%s,  Time:%s,  Content:%s   \n ",
+				r1.getReplyID(), r1.getForum().getForumID(), r1.getUser().getUserID(), r1.getTimeStamp(), r1.getContent());
+		
+		List<Reply> rList = replyDao.getReplyForForum(forum1);
+		for(Reply r : rList) {
+			System.out.format("Looping Reply:  ID:%s, ForumID:%s,  UserID:%s,  Time:%s,  Content:%s   \n ",
+					r.getReplyID(), r.getForum().getForumID(), r.getUser().getUserID(), r.getTimeStamp(), r.getContent());
+		}
+		
+		List<Reply> rList1 = replyDao.getReplyForUser(user3);
+		for(Reply r : rList1) {
+			System.out.format("Looping Reply:  ID:%s, ForumID:%s,  UserID:%s,  Time:%s,  Content:%s   \n ",
+					r.getReplyID(), r.getForum().getForumID(), r.getUser().getUserID(), r.getTimeStamp(), r.getContent());
+		}
+		
+		
+		System.out.println();
+		
+		
+		
 	}
 }
