@@ -2,19 +2,19 @@ package carAuction.model;
 
 
 public class CustomerService {
-	protected int CustomerServiceID;
+	protected String CustomerServiceID;
 	protected String FirstName;
 	protected String LastName;
 	
-	public CustomerService(int customerServiceID, String firstName, String lastName) {
+	public CustomerService(String customerServiceID, String firstName, String lastName) {
 		this.CustomerServiceID = customerServiceID;
 		this.FirstName = firstName;
 		this.LastName = lastName;
 	}
-	public int getCustomerServiceID() {
+	public String getCustomerServiceID() {
 		return CustomerServiceID;
 	}
-	public void setCustomerServiceID(int customerServiceID) {
+	public void setCustomerServiceID(String customerServiceID) {
 		CustomerServiceID = customerServiceID;
 	}
 	public String getFirstName() {

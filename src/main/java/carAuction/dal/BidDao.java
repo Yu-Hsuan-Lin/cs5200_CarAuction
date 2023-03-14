@@ -29,30 +29,20 @@ public class BidDao {
 
 	public Bid create(Bid bid) throws SQLException {
 		String insertBid =
-			"INSERT INTO Bid(AuctionID,UserID,BidTime,BidPrice) " +
-			"VALUES(?,?,?,?);";
+			"INSERT INTO Bid(BidID,AuctionID,UserID,BidTime,BidPrice) " +
+			"VALUES(?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
-		ResultSet resultKey = null;
 		try {
-			connection = connectionManager.getConnection();
+			connection = connectionManager.getConnection();		
 			insertStmt = connection.prepareStatement(insertBid,
 				Statement.RETURN_GENERATED_KEYS);
-			insertStmt.setInt(1, bid.getAuction().getAuctionID());
-			insertStmt.setInt(2, bid.getUser().getUserID());
-			insertStmt.setTimestamp(3, new Timestamp(bid.getBidTime().getTime()));
-			insertStmt.setFloat(4, bid.getBidPrice());
+			insertStmt.setString(1, bid.getBidID());
+			insertStmt.setString(2, bid.getAuction().getAuctionID());
+			insertStmt.setString(3, bid.getUser().getUserID());
+			insertStmt.setTimestamp(4, new Timestamp(bid.getBidTime().getTime()));
+			insertStmt.setFloat(5, bid.getBidPrice());
 			insertStmt.executeUpdate();
-			
-			// Retrieve the auto-generated key and set it, so it can be used by the caller.
-			resultKey = insertStmt.getGeneratedKeys();
-			int bidID = -1;
-			if(resultKey.next()) {
-				bidID = resultKey.getInt(1);
-			} else {
-				throw new SQLException("Unable to retrieve auto-generated key.");
-			}
-			bid.setBidID(bidID);
 			return bid;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -63,9 +53,6 @@ public class BidDao {
 			}
 			if(insertStmt != null) {
 				insertStmt.close();
-			}
-			if(resultKey != null) {
-				resultKey.close();
 			}
 		}
 	}
@@ -82,7 +69,7 @@ public class BidDao {
 			connection = connectionManager.getConnection();
 			updateStmt = connection.prepareStatement(updateeBidPrice);
 			updateStmt.setFloat(1, BidPrice);
-			updateStmt.setInt(2, bid.getBidID());
+			updateStmt.setString(2, bid.getBidID());
 			updateStmt.executeUpdate();
 
 			// Update the bid param before returning to the caller.
@@ -112,7 +99,7 @@ public class BidDao {
 		try {
 			connection = connectionManager.getConnection();
 			deleteStmt = connection.prepareStatement(deleteBid);
-			deleteStmt.setInt(1, bid.getBidID());
+			deleteStmt.setString(1, bid.getBidID());
 			deleteStmt.executeUpdate();
 
 			// Return null so the caller can no longer operate on the BlogComments instance.
@@ -133,7 +120,7 @@ public class BidDao {
 	/**
 	 * Get the Bid record by fetching it from your MySQL instance.
 	 */
-	public Bid getBidById(int bidID) throws SQLException {
+	public Bid getBidById(String bidID) throws SQLException {
 		String selectBid =
 			"SELECT BidID,AuctionID,UserID,BidTime,BidPrice " +
 			"FROM Bid " +
@@ -144,16 +131,16 @@ public class BidDao {
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectBid);
-			selectStmt.setInt(1, bidID);
+			selectStmt.setString(1, bidID);
 			results = selectStmt.executeQuery();
 			AuctionDao auctionDao = AuctionDao.getInstance();
-			UserDao userDao = UserDao.getInstance();
+			UsersDao userDao = UsersDao.getInstance();
 			if(results.next()) {
-				int resultBidID = results.getInt("bidID");
+				String resultBidID = results.getString("bidID");
 				Date bidTime =  new Date(results.getTimestamp("BidTime").getTime());
 				float bidPrice = results.getFloat("BidPrice");
-				Auction auction = auctionDao.getAuctionById(results.getInt("AuctionID"));
-				User user = userDao.getUserById(results.getInt("UserID"));
+				Auction auction = auctionDao.getAuctionById(results.getString("AuctionID"));
+				Users user = userDao.getUserFromuserID(results.getString("UserID"));
 				Bid bid = new Bid(resultBidID, auction,
 						user, bidTime, bidPrice);
 				return bid;
@@ -178,7 +165,7 @@ public class BidDao {
 	/**
 	 * Get the all the Bid for a user.
 	 */
-	public List<Bid> getBidForUser(User user) throws SQLException {
+	public List<Bid> getBidForUser(Users user) throws SQLException {
 		List<Bid> bids = new ArrayList<Bid>();
 		String selectBid =
 			"SELECT BidID,AuctionID,UserID,BidTime,BidPrice " +
@@ -190,14 +177,14 @@ public class BidDao {
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectBid);
-			selectStmt.setInt(1, user.getUserById());
+			selectStmt.setString(1, user.getUserID());
 			results = selectStmt.executeQuery();
 			AuctionDao auctionDao = AuctionDao.getInstance();
 			while(results.next()) {
-				int bidID = results.getInt("BidID");
+				String bidID = results.getString("BidID");
 				Date bidTime =  new Date(results.getTimestamp("BidTime").getTime());
 				float bidPrice = results.getFloat("BidPrice");
-				Auction auction = auctionDao.getAuctionById(results.getInt("AuctionID"));
+				Auction auction = auctionDao.getAuctionById(results.getString("AuctionID"));
 				Bid bid = new Bid(bidID, auction, user,
 						bidTime, bidPrice);
 				bids.add(bid);
@@ -234,14 +221,14 @@ public class BidDao {
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectBid);
-			selectStmt.setInt(1, auction.getAuctionById());
+			selectStmt.setString(1, auction.getAuctionID());
 			results = selectStmt.executeQuery();
-			UserDao userDao = UserDao.getInstance();
+			UsersDao userDao = UsersDao.getInstance();
 			while(results.next()) {
-				int bidID = results.getInt("BidID");
+				String bidID = results.getString("BidID");
 				Date bidTime =  new Date(results.getTimestamp("BidTime").getTime());
 				float bidPrice = results.getFloat("BidPrice");
-				User user = userDao.getUserById(results.getInt("UserID"));
+				Users user = userDao.getUserFromuserID(results.getString("UserID"));
 				Bid bid = new Bid(bidID, auction, user,
 						bidTime, bidPrice);
 				bids.add(bid);

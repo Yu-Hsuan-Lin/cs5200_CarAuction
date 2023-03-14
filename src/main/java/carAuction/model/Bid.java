@@ -4,34 +4,34 @@ import java.util.Date;
 
 
 public class Bid {
-	protected int BidID;
+	protected String BidID;
 	protected Auction Auction;
-	protected User User;
+	protected Users User;
 	protected Date BidTime;
 	protected Float BidPrice;
-	public Bid(int bidID, Auction Auction, User User, Date BidTime, Float BidPrice) {
-		this.BidID = bidID;
+	public Bid(String BidID, Auction Auction, Users User, Date BidTime, Float BidPrice) {
+		this.BidID = BidID;
 		this.Auction = Auction;
 		this.User = User;
 		this.BidTime = BidTime;
 		this.BidPrice = BidPrice;
 	}
-	public int getBidID() {
+	public String getBidID() {
 		return BidID;
 	}
-	public void setBidID(int BidID) {
+	public void setBidID(String BidID) {
 		this.BidID = BidID;
 	}
-	public int getAuction() {
+	public Auction getAuction() {
 		return Auction;
 	}
 	public void setAuction(Auction Auction) {
 		this.Auction = Auction;
 	}
-	public User getUser() {
+	public Users getUser() {
 		return User;
 	}
-	public void setUser(User User) {
+	public void setUser(Users User) {
 		this.User = User;
 	}
 	public Date getBidTime() {
