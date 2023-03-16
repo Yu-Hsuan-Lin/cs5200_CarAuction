@@ -55,7 +55,15 @@ public class CarsDao {
 			insertStmt.setString(13, cars.getInterior());
 			insertStmt.setInt(14, cars.getMMR());
 			insertStmt.executeUpdate();
-			
+			// Retrieve the auto-generated key and set it, so it can be used by the caller.
+			resultKey = insertStmt.getGeneratedKeys();
+			int carID = -1;
+			if(resultKey.next()) {
+				carID = resultKey.getInt(1);
+			} else {
+				throw new SQLException("Unable to retrieve auto-generated key.");
+			}
+			cars.setCarID(carID);
 			return cars;
 		} catch (SQLException e) {
 			e.printStackTrace();

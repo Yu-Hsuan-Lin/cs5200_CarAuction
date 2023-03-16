@@ -248,6 +248,29 @@ public class Inserter {
 		
 		
 		// Bid inserter
+		BidsDao bidsDao = BidsDao.getInstance();
+		// Bid inserter
+		Bids bid1 = new Bids(auctionsDao.getAuctionById(1), user1,  new SimpleDateFormat("yyyy-mm-dd HH:MM:ss").parse("2015-02-17 04:30:00"), 41000F);
+		Bids bids1 = bidsDao.create(bid1);
+		System.out.println(bids1.getBidID());
+		Bids b1 = bidsDao.getBidById(1);
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		b1.getBidID(), b1.getAuction().getAuctionID(), b1.getUser().getUserID(), b1.getBidTime(), b1.getBidPrice());
+		List<Bids> b2 = bidsDao.getBidsForAuction(bid1.getAuction());
+		for (Bids bid : b2) {
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		bid.getBidID(), bid.getAuction().getAuctionID(), bid.getUser().getUserID(), bid.getBidTime(), bid.getBidPrice());
+		}
+		List<Bids> b3 = bidsDao.getBidsForUser(bid1.getUser());
+		for (Bids bid : b3) {
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		bid.getBidID(), bid.getAuction().getAuctionID(), bid.getUser().getUserID(), bid.getBidTime(), bid.getBidPrice());
+		}
+		Bids b4 = bidsDao.updateBidPrice(bid1, 42000F);
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		b4.getBidID(), b4.getAuction().getAuctionID(), b4.getUser().getUserID(), b4.getBidTime(), b4.getBidPrice());
+		// bidsDao.delete(bid1);
+
 		
 		// ChatHistory inserter
 		
@@ -268,7 +291,7 @@ public class Inserter {
 		Forums Forum4 = new Forums(auction4, user2, date, "Forum4 content ............");
 		Forum4 = ForumssDao.create(Forum4);
 		
-		Forums Forum5 = new Forums(auction4, user3, date, "Forum5 content ............");
+		Forums Forum5 = new Forums(auction5, user3, date, "Forum5 content ............");
 		Forum5 = ForumssDao.create(Forum5);
 
 		

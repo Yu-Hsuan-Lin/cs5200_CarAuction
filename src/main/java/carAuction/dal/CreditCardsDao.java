@@ -40,7 +40,6 @@ public class CreditCardsDao {
             insertStmt.setInt(4, creditCard.getExpirationYear());
             insertStmt.setString(5, creditCard.getNameOnCard());
             insertStmt.setString(6, creditCard.getZipCode());
-            
 			insertStmt.executeUpdate();
 
 			return creditCard;

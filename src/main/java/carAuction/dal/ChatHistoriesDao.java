@@ -43,8 +43,17 @@ public class ChatHistoriesDao {
       insertStmt.setTimestamp(3, new Timestamp(chatHistories.getTimeStamp().getTime()));
       insertStmt.setString(4, chatHistories.getServiceType().name());
       insertStmt.executeUpdate();
-
+      // Retrieve the auto-generated key and set it, so it can be used by the caller.
+	  resultKey = insertStmt.getGeneratedKeys();
+	  int chatHistorieID = -1;
+	  if(resultKey.next()) {
+		  chatHistorieID = resultKey.getInt(1);
+	  } else {
+		  throw new SQLException("Unable to retrieve auto-generated key.");
+	  }
+	  chatHistories.setChatID(chatHistorieID);
       return chatHistories;
+      
     } catch (SQLException e) {
       e.printStackTrace();
       throw e;

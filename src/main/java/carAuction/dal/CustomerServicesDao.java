@@ -37,6 +37,15 @@ public class CustomerServicesDao {
 			insertStmt.setString(1, customerServices.getFirstName());
 			insertStmt.setString(2, customerServices.getLastName());
 			insertStmt.executeUpdate();
+			// Retrieve the auto-generated key and set it, so it can be used by the caller.
+			resultKey = insertStmt.getGeneratedKeys();
+			int customerServiceID = -1;
+			if(resultKey.next()) {
+				customerServiceID = resultKey.getInt(1);
+			} else {
+				throw new SQLException("Unable to retrieve auto-generated key.");
+			}
+			customerServices.setCustomerServiceID(customerServiceID);
 			return customerServices;
 		} catch (SQLException e) {
 			e.printStackTrace();

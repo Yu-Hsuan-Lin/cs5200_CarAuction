@@ -52,6 +52,15 @@ protected ConnectionManager connectionManager;
 			insertStmt.setInt(11, auctions.getCustomerService().getCustomerServiceID());
 			insertStmt.setBoolean(12, auctions.getPriceChangeAlert());
 			insertStmt.executeUpdate();
+			// Retrieve the auto-generated key and set it, so it can be used by the caller.
+			resultKey = insertStmt.getGeneratedKeys();
+			int auctionID = -1;
+			if(resultKey.next()) {
+				auctionID = resultKey.getInt(1);
+			} else {
+				throw new SQLException("Unable to retrieve auto-generated key.");
+			}
+			auctions.setAuctionID(auctionID);
 			
 			return auctions;
 		} catch (SQLException e) {

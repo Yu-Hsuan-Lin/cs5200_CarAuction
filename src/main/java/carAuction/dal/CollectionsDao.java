@@ -41,6 +41,15 @@ public class CollectionsDao {
       insertStmt.setBoolean(3, collection.getPriceChangeAlert());
       insertStmt.setBoolean(4, collection.getStatusChangeAlert());
       insertStmt.executeUpdate();
+      // Retrieve the auto-generated key and set it, so it can be used by the caller.
+      resultKey = insertStmt.getGeneratedKeys();
+      int collectionID = -1;
+      if(resultKey.next()) {
+    	  collectionID = resultKey.getInt(1);
+      } else {
+    	 throw new SQLException("Unable to retrieve auto-generated key.");
+      }
+      collection.setCollectionId(collectionID);
 
       return collection;
 
