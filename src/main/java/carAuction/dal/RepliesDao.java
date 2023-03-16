@@ -29,15 +29,15 @@ public class RepliesDao {
 	
     
 	public Replies create(Replies reply) throws SQLException {
-		String insertReply =
-			"INSERT INTO Reply(ForumID,UserID,TimeStamp,Content) " +
+		String insertReplies =
+			"INSERT INTO Replies(ForumID,UserID,TimeStamp,Content) " +
 			"VALUES(?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		ResultSet resultKey = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertReply, Statement.RETURN_GENERATED_KEYS);
+			insertStmt = connection.prepareStatement(insertReplies, Statement.RETURN_GENERATED_KEYS);
 			
 			insertStmt.setInt(1, reply.getForum().getForumID());
 			insertStmt.setInt(2, reply.getUser().getUserID());
@@ -54,6 +54,7 @@ public class RepliesDao {
 			}
 			reply.setReplyID(replyID);
 			return reply;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -64,25 +65,22 @@ public class RepliesDao {
 			if(insertStmt != null) {
 				insertStmt.close();
 			}
-			if(resultKey != null) {
-				resultKey.close();
-			}
 		}
 	}
 
-	public Replies delete(Replies reply) throws SQLException {
+	public Replies delete(Replies Replies) throws SQLException {
 
-		String deleteReply = "DELETE FROM Replies WHERE ReplyID=?;";
+		String deleteReplies = "DELETE FROM Replies WHERE ReplyID=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
 		try {
 			connection = connectionManager.getConnection();
-			deleteStmt = connection.prepareStatement(deleteReply);
-			deleteStmt.setInt(1, reply.getReplyID());
+			deleteStmt = connection.prepareStatement(deleteReplies);
+			deleteStmt.setInt(1, Replies.getReplyID());
 			int affectedRows = deleteStmt.executeUpdate();
 
 			if (affectedRows == 0) {
-				throw new SQLException("No records available to delete for ReplyID=" + reply.getReplyID());
+				throw new SQLException("No records available to delete for ReplyID=" + Replies.getReplyID());
 			}
 
 			return null;
@@ -99,22 +97,22 @@ public class RepliesDao {
 		}
 	}
 
-	public Replies updateReply(Replies reply, String newContent) throws SQLException {
-		String updateReply = "UPDATE Forum SET Content=?,Created=? WHERE ReplyID=?;";
+	public Replies updateReply(Replies Replies, String newContent) throws SQLException {
+		String updateReplies = "UPDATE Replies SET Content=?,TimeStamp=? WHERE ReplyID=?;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {
 			connection = connectionManager.getConnection();
-			updateStmt = connection.prepareStatement(updateReply);
+			updateStmt = connection.prepareStatement(updateReplies);
 			updateStmt.setString(1, newContent);
 			Date newCreatedTimestamp = new Date();
 			updateStmt.setTimestamp(2, new Timestamp(newCreatedTimestamp.getTime()));
-			updateStmt.setInt(3, reply.getReplyID());
+			updateStmt.setInt(3, Replies.getReplyID());
 			updateStmt.executeUpdate();
 
-			reply.setContent(newContent);
-			reply.setTimeStamp(newCreatedTimestamp);
-			return reply;
+			Replies.setContent(newContent);
+			Replies.setTimeStamp(newCreatedTimestamp);
+			return Replies;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -129,7 +127,7 @@ public class RepliesDao {
 	}
 
 	public Replies getReplyById(int replyID) throws SQLException {
-		String selectReply =
+		String selectReplies =
 			"SELECT ReplyID,ForumID,UserID,TimeStamp,Content " +
 			"FROM Replies " +
 			"WHERE ReplyID=?;";
@@ -138,17 +136,17 @@ public class RepliesDao {
 		ResultSet results = null;
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectReply);
+			selectStmt = connection.prepareStatement(selectReplies);
 			selectStmt.setInt(1, replyID);
 			results = selectStmt.executeQuery();
-			ForumsDao forumDao = ForumsDao.getInstance();
+			ForumsDao forumsDao = ForumsDao.getInstance();
 			UsersDao usersDao = UsersDao.getInstance();
 			
 			if(results.next()) {
 				int resultReplyID = results.getInt("ReplyID");
 				
 				int forumID = results.getInt("ForumID");
-				Forums forum = forumDao.getForumById(forumID);
+				Forums forum = forumsDao.getForumById(forumID);
 				
 				int userID = results.getInt("UserID");
 				Users user = usersDao.getUserFromUserID(userID);
@@ -180,7 +178,7 @@ public class RepliesDao {
 
 	public List<Replies> getReplyForForum(Forums forum) throws SQLException {
 		List<Replies> replies = new ArrayList<Replies>();
-		String selectReply =
+		String selectReplies =
 			"SELECT ReplyID,ForumID,UserID,TimeStamp,Content " +
 			"FROM Replies " +
 			"WHERE ForumID=?;";
@@ -189,7 +187,7 @@ public class RepliesDao {
 		ResultSet results = null;
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectReply);
+			selectStmt = connection.prepareStatement(selectReplies);
 			selectStmt.setInt(1, forum.getForumID());
 			results = selectStmt.executeQuery();
 			
@@ -205,6 +203,7 @@ public class RepliesDao {
 				Replies reply = new Replies(ReplyID, forum, user, timeStamp, content);
 				
 				replies.add(reply);
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -225,7 +224,7 @@ public class RepliesDao {
 
 	public List<Replies> getReplyForUser(Users user) throws SQLException {
 		List<Replies> replies = new ArrayList<Replies>();
-		String selectReply =
+		String selectReplies =
 			"SELECT ReplyID,ForumID,UserID,TimeStamp,Content " +
 			"FROM Replies " +
 			"WHERE UserID=?;";
@@ -234,7 +233,7 @@ public class RepliesDao {
 		ResultSet results = null;
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectReply);
+			selectStmt = connection.prepareStatement(selectReplies);
 			selectStmt.setInt(1, user.getUserID());
 			results = selectStmt.executeQuery();
 			
@@ -253,6 +252,7 @@ public class RepliesDao {
 				
 				replies.add(reply);
 			}
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;

@@ -27,26 +27,34 @@ public class ForumsDao {
 		return instance;
 	}
 	
-	public Forums create(Forums forums) throws SQLException {
-		String insertForum =
-			"INSERT INTO Forum(AuctionID,UserID,TimeStamp,Content) " +
+	public Forums create(Forums forum) throws SQLException {
+		String insertForums =
+			"INSERT INTO Forums(AuctionID,UserID,TimeStamp,Content) " +
 			"VALUES(?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		ResultSet resultKey = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertForum,
-				Statement.RETURN_GENERATED_KEYS);
+			insertStmt = connection.prepareStatement(insertForums, Statement.RETURN_GENERATED_KEYS);
 			
-			//!!!-----------no auction class yet-------------------!!!
-			insertStmt.setInt(1, forums.getAuction().getAuctionID()); 
-			insertStmt.setInt(2, forums.getUser().getUserID());
-			insertStmt.setTimestamp(3, new Timestamp(forums.getTimeStamp().getTime()));
-			insertStmt.setString(4, forums.getContent());
+			insertStmt.setInt(1, forum.getAuction().getAuctionID()); 
+			insertStmt.setInt(2, forum.getUser().getUserID());
+			insertStmt.setTimestamp(3, new Timestamp(forum.getTimeStamp().getTime()));
+			insertStmt.setString(4, forum.getContent());
 			insertStmt.executeUpdate();
 			
-			return forums;
+			resultKey = insertStmt.getGeneratedKeys();
+			int forumID = -1;
+			if(resultKey.next()) {
+				forumID = resultKey.getInt(1);
+			} else {
+				throw new SQLException("Unable to retrieve auto-generated key.");
+			}
+			
+			forum.setForumID(forumID);
+			
+			return forum;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -57,25 +65,22 @@ public class ForumsDao {
 			if(insertStmt != null) {
 				insertStmt.close();
 			}
-			if(resultKey != null) {
-				resultKey.close();
-			}
 		}
 	}
 
 	public Forums delete(Forums forum) throws SQLException {
 
-		String deleteForum = "DELETE FROM Forums WHERE ForumID=?;";
+		String deleteForums = "DELETE FROM Forums WHERE ForumID=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
 		try {
 			connection = connectionManager.getConnection();
-			deleteStmt = connection.prepareStatement(deleteForum);
+			deleteStmt = connection.prepareStatement(deleteForums);
 			deleteStmt.setInt(1, forum.getForumID());
 			int affectedRows = deleteStmt.executeUpdate();
 
 			if (affectedRows == 0) {
-				throw new SQLException("No records available to delete for ForumID=" + forum.getForumID());
+				throw new SQLException("No records available to delete for ForumsID=" + forum.getForumID());
 			}
 
 			return null;
@@ -93,7 +98,7 @@ public class ForumsDao {
 	}
 	
 	public Forums updateForum(Forums forum, String newContent) throws SQLException {
-		String updateForum = "UPDATE Forum SET Content=?,Created=? WHERE ForumID=?;";
+		String updateForum = "UPDATE Forums SET Content=?,TimeStamp=? WHERE ForumID=?;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {
@@ -122,7 +127,7 @@ public class ForumsDao {
 	}
 	
 	public Forums getForumById(int forumID) throws SQLException {
-		String selectForum =
+		String selectForums =
 			"SELECT ForumID,AuctionID,UserID,TimeStamp,Content " +
 			"FROM Forums " +
 			"WHERE ForumID=?;";
@@ -131,20 +136,18 @@ public class ForumsDao {
 		ResultSet results = null;
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectForum);
+			selectStmt = connection.prepareStatement(selectForums);
 			selectStmt.setInt(1, forumID);
 			results = selectStmt.executeQuery();
 			UsersDao usersDao = UsersDao.getInstance();
 			
-			//!!!-----------no auction class yet-------------------!!!
-			AuctionsDao auctionsDao = AuctionsDao.getInstance();
+			AuctionsDao auctionDao = AuctionsDao.getInstance();
 			
 			if(results.next()) {
-				int resultForumID = results.getInt("ForumID");
+				int resultForumsID = results.getInt("ForumID");
 				
-				//!!!-----------no auction class yet-------------------!!!
 				int auctionID = results.getInt("AuctionID");
-				Auctions auction = auctionsDao.getAuctionById(auctionID);
+				Auctions auction = auctionDao.getAuctionById(auctionID);
 				
 				int userID = results.getInt("UserID");
 				Users user = usersDao.getUserFromUserID(userID);
@@ -152,7 +155,7 @@ public class ForumsDao {
 				Date timeStamp = new Date(results.getTimestamp("TimeStamp").getTime());
 				String content = results.getString("Content");
 				
-				Forums forum = new Forums(resultForumID, auction,
+				Forums forum = new Forums(resultForumsID, auction,
 						user, timeStamp, content);
 				
 				return forum;
@@ -176,7 +179,7 @@ public class ForumsDao {
 	
 	public List<Forums> getForumForUser(Users user) throws SQLException {
 		List<Forums> forums = new ArrayList<Forums>();
-		String selectForum =
+		String selectForums =
 			"SELECT ForumID,AuctionID,UserID,TimeStamp,Content " +
 			"FROM Forums " +
 			"WHERE UserID=?;";
@@ -185,17 +188,15 @@ public class ForumsDao {
 		ResultSet results = null;
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectForum);
+			selectStmt = connection.prepareStatement(selectForums);
 			selectStmt.setInt(1, user.getUserID());
 			results = selectStmt.executeQuery();
 			
-			//!!!-----------no auction class yet-------------------!!!
 			AuctionsDao auctionsDao = AuctionsDao.getInstance();
 			
 			while(results.next()) {
 				int resultForumID = results.getInt("ForumID");
 				
-				//!!!-----------no auction class yet-------------------!!!
 				int auctionID = results.getInt("AuctionID");
 				Auctions auction = auctionsDao.getAuctionById(auctionID);
 				
@@ -224,10 +225,9 @@ public class ForumsDao {
 		return forums;
 	}
 
-	//!!!-----------no auction class yet-------------------!!!
 	public List<Forums> getForumForAuction(Auctions auction) throws SQLException {
 		List<Forums> forums = new ArrayList<Forums>();
-		String selectForum =
+		String selectForums =
 			"SELECT ForumID,AuctionID,UserID,TimeStamp,Content " +
 			"FROM Forums " +
 			"WHERE AuctionID=?;";
@@ -236,7 +236,7 @@ public class ForumsDao {
 		ResultSet results = null;
 		try {
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectForum);
+			selectStmt = connection.prepareStatement(selectForums);
 			selectStmt.setInt(1, auction.getAuctionID());
 			results = selectStmt.executeQuery();
 			
@@ -245,7 +245,6 @@ public class ForumsDao {
 			while(results.next()) {
 				int forumID = results.getInt("ForumID");
 				
-				//!!!-----------no auction class yet-------------------!!!
 				int userID = results.getInt("UserID");
 				Users user = usersDao.getUserFromUserID(userID);
 				
@@ -275,12 +274,6 @@ public class ForumsDao {
 	}
 	
 }
-
-
-
-
-
-
 
 
 

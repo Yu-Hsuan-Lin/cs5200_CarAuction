@@ -32,7 +32,7 @@ public class Forums {
 		return ForumID;
 	}
 
-	public void setForumsID(int ForumID) {
+	public void setForumID(int ForumID) {
 		this.ForumID = ForumID;
 	}
 
