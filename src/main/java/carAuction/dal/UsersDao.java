@@ -193,4 +193,57 @@ public class UsersDao {
 			}
 		}
 	}
+	
+	// zephyr
+	public Users getUserFromCarId(int carID) throws SQLException {
+		String selectUser = "SELECT CarID, Users.UserID, FirstName, LastName, Address1, Address2, City, Users.State,  Zipcode,  Country, Phone, Email, Password, SignUp "
+				+ "from Users JOIN Cars USING (UserID) "
+				+ "WHERE CarID=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectUser);
+			selectStmt.setInt(1, carID);
+			
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int resultuserID = results.getInt("Users.UserID");
+				String firstName = results.getString("firstName");
+				String lastName = results.getString("lastName");
+				String address1 = results.getString("address1");
+				String address2 = results.getString("address2");
+				String city = results.getString("city");
+                String state = results.getString("state");
+                String zipcode = results.getString("zipcode");
+                String country = results.getString("country");
+                String phone = results.getString("phone");
+                String email = results.getString("email");
+                String password = results.getString("password");
+                Date signUp = results.getDate("signUp");
+			
+				Users User = new Users(resultuserID, firstName, lastName, address1, 
+						               address2, city, state,  zipcode,  
+						               country, phone, email, password, signUp );
+				return User;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
+	
 }

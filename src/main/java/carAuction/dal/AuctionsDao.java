@@ -525,4 +525,316 @@ protected ConnectionManager connectionManager;
 		}
 		return auctions;
 	}
+	
+	public List<Pair<Auctions, Cars>> getAuctionByMakerAndModel(String maker, String model) throws SQLException {
+		List<Pair<Auctions, Cars>> searchResults = new ArrayList<>();
+		String selectAuctions =
+				"SELECT AuctionID,Title,StartTime,EndTime,Auctions.CarID,Auctions.UserID,Highlights,Pictures,MinimumPrice,CurrentHighestPrice,AuctionStatus,CustomerServiceID,PriceChangeAlert,Cars.UserID,Year,Maker,Model,Trim,Body,Transmission,VIN,State,ConditionScore,OdoMeter,Color,Interior,MMR " +
+				"FROM Auctions JOIN Cars USING (CarID)" +
+				"WHERE maker=? and model=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		CarsDao carDao = CarsDao.getInstance();
+		UsersDao usersDao = UsersDao.getInstance();
+		CustomerServicesDao customerServicesDao = CustomerServicesDao.getInstance();
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectAuctions);
+			selectStmt.setString(1, maker);
+			selectStmt.setString(2, model);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int auctionID = results.getInt("AuctionID");
+				String title = results.getString("Title");
+				Date startTime =  new Date(results.getTimestamp("StartTime").getTime());
+				Date endTime =  new Date(results.getTimestamp("EndTime").getTime());
+				Cars car = carDao.getCarById(results.getInt("Auctions.CarID"));
+				Users auctionUser = usersDao.getUserFromUserID(results.getInt("Auctions.UserID"));
+				String highlights = results.getString("Highlights");
+				String pictures = results.getString("Pictures");
+				Float minimumPrice = results.getFloat("MinimumPrice");
+				Float currentHighestPrice = results.getFloat("CurrentHighestPrice");
+				Auctions.AuctionStatusValue auctionStatus = Auctions.AuctionStatusValue.valueOf(results.getString("AuctionStatus"));
+				CustomerServices customerService = customerServicesDao.getCustomerServiceById(results.getInt("CustomerServiceID"));
+				Boolean priceChangeAlert = results.getBoolean("PriceChangeAlert");
+				
+				int resultCarID = results.getInt("CarID");
+				Users carUser = usersDao.getUserFromUserID(results.getInt("Cars.UserID"));
+				Integer year = results.getInt("Year");
+				String resultMaker = results.getString("Maker");
+				String resultModel = results.getString("Model");
+				String trim = results.getString("Trim");
+				String body = results.getString("Body");
+				String transmission = results.getString("Transmission");
+				String vin = results.getString("VIN");
+				String state = results.getString("State");
+				Float conditionScore = results.getFloat("ConditionScore");
+				Integer odoMeter = results.getInt("OdoMeter");
+				String color = results.getString("Color");
+				String interior = results.getString("Interior");
+				Integer mmr = results.getInt("MMR");
+				
+				Auctions auction = new Auctions(auctionID,title,startTime,endTime,car,auctionUser,highlights,pictures,minimumPrice,currentHighestPrice,auctionStatus,customerService,priceChangeAlert);
+				Cars resuktCar = new Cars(resultCarID,carUser,year,maker,model,trim,body,transmission,vin,state,conditionScore,odoMeter,color,interior,mmr);
+				
+				searchResults.add(new Pair<Auctions, Cars>(auction, resuktCar));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return searchResults;
+	}
+	
+	public List<Pair<Auctions, Cars>> getAuctionByBidPriceRange(float lower, float upper, String order) throws SQLException {
+		List<Pair<Auctions, Cars>> searchResults = new ArrayList<>();
+		String selectAuctions =
+				"SELECT AuctionID,Title,StartTime,EndTime,Auctions.CarID,Auctions.UserID,Highlights,Pictures,MinimumPrice,CurrentHighestPrice,AuctionStatus,CustomerServiceID,PriceChangeAlert,Cars.UserID,Year,Maker,Model,Trim,Body,Transmission,VIN,State,ConditionScore,OdoMeter,Color,Interior,MMR " +
+				"FROM Auctions JOIN Cars USING (CarID)" +
+				"WHERE CurrentHighestPrice >= ? and CurrentHighestPrice <= ? " + 
+				"ORDER BY CurrentHighestPrice " + order + ";";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		CarsDao carDao = CarsDao.getInstance();
+		UsersDao usersDao = UsersDao.getInstance();
+		CustomerServicesDao customerServicesDao = CustomerServicesDao.getInstance();
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectAuctions);
+			selectStmt.setFloat(1, lower);
+			selectStmt.setFloat(2, upper);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int auctionID = results.getInt("AuctionID");
+				String title = results.getString("Title");
+				Date startTime =  new Date(results.getTimestamp("StartTime").getTime());
+				Date endTime =  new Date(results.getTimestamp("EndTime").getTime());
+				Cars car = carDao.getCarById(results.getInt("Auctions.CarID"));
+				Users auctionUser = usersDao.getUserFromUserID(results.getInt("Auctions.UserID"));
+				String highlights = results.getString("Highlights");
+				String pictures = results.getString("Pictures");
+				Float minimumPrice = results.getFloat("MinimumPrice");
+				Float currentHighestPrice = results.getFloat("CurrentHighestPrice");
+				Auctions.AuctionStatusValue auctionStatus = Auctions.AuctionStatusValue.valueOf(results.getString("AuctionStatus"));
+				CustomerServices customerService = customerServicesDao.getCustomerServiceById(results.getInt("CustomerServiceID"));
+				Boolean priceChangeAlert = results.getBoolean("PriceChangeAlert");
+				
+				int resultCarID = results.getInt("CarID");
+				Users carUser = usersDao.getUserFromUserID(results.getInt("Cars.UserID"));
+				Integer year = results.getInt("Year");
+				String resultMaker = results.getString("Maker");
+				String resultModel = results.getString("Model");
+				String trim = results.getString("Trim");
+				String body = results.getString("Body");
+				String transmission = results.getString("Transmission");
+				String vin = results.getString("VIN");
+				String state = results.getString("State");
+				Float conditionScore = results.getFloat("ConditionScore");
+				Integer odoMeter = results.getInt("OdoMeter");
+				String color = results.getString("Color");
+				String interior = results.getString("Interior");
+				Integer mmr = results.getInt("MMR");
+				
+				Auctions auction = new Auctions(auctionID,title,startTime,endTime,car,auctionUser,highlights,pictures,minimumPrice,currentHighestPrice,auctionStatus,customerService,priceChangeAlert);
+				Cars resuktCar = new Cars(resultCarID,carUser,year,resultMaker,resultModel,trim,body,transmission,vin,state,conditionScore,odoMeter,color,interior,mmr);
+				
+				searchResults.add(new Pair<Auctions, Cars>(auction, resuktCar));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return searchResults;
+	}
+	
+	public List<Pair<Auctions, Cars>> getClosedAuction() throws SQLException {
+		List<Pair<Auctions, Cars>> searchResults = new ArrayList<>();
+		String selectAuctions =
+				"SELECT AuctionID,Title,StartTime,EndTime,Auctions.CarID,Auctions.UserID,Highlights,Pictures,MinimumPrice,CurrentHighestPrice,AuctionStatus,CustomerServiceID,PriceChangeAlert,Cars.UserID,Year,Maker,Model,Trim,Body,Transmission,VIN,State,ConditionScore,OdoMeter,Color,Interior,MMR " +
+				"FROM Auctions JOIN Cars USING (CarID)" +
+				"WHERE AuctionStatus = 'Succeed' " +
+				"ORDER BY CurrentHighestPrice DESC";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		CarsDao carDao = CarsDao.getInstance();
+		UsersDao usersDao = UsersDao.getInstance();
+		CustomerServicesDao customerServicesDao = CustomerServicesDao.getInstance();
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectAuctions);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int auctionID = results.getInt("AuctionID");
+				String title = results.getString("Title");
+				Date startTime =  new Date(results.getTimestamp("StartTime").getTime());
+				Date endTime =  new Date(results.getTimestamp("EndTime").getTime());
+				Cars car = carDao.getCarById(results.getInt("Auctions.CarID"));
+				Users auctionUser = usersDao.getUserFromUserID(results.getInt("Auctions.UserID"));
+				String highlights = results.getString("Highlights");
+				String pictures = results.getString("Pictures");
+				Float minimumPrice = results.getFloat("MinimumPrice");
+				Float currentHighestPrice = results.getFloat("CurrentHighestPrice");
+				Auctions.AuctionStatusValue auctionStatus = Auctions.AuctionStatusValue.valueOf(results.getString("AuctionStatus"));
+				CustomerServices customerService = customerServicesDao.getCustomerServiceById(results.getInt("CustomerServiceID"));
+				Boolean priceChangeAlert = results.getBoolean("PriceChangeAlert");
+				
+				int resultCarID = results.getInt("CarID");
+				Users carUser = usersDao.getUserFromUserID(results.getInt("Cars.UserID"));
+				Integer year = results.getInt("Year");
+				String resultMaker = results.getString("Maker");
+				String resultModel = results.getString("Model");
+				String trim = results.getString("Trim");
+				String body = results.getString("Body");
+				String transmission = results.getString("Transmission");
+				String vin = results.getString("VIN");
+				String state = results.getString("State");
+				Float conditionScore = results.getFloat("ConditionScore");
+				Integer odoMeter = results.getInt("OdoMeter");
+				String color = results.getString("Color");
+				String interior = results.getString("Interior");
+				Integer mmr = results.getInt("MMR");
+				
+				Auctions auction = new Auctions(auctionID,title,startTime,endTime,car,auctionUser,highlights,pictures,minimumPrice,currentHighestPrice,auctionStatus,customerService,priceChangeAlert);
+				Cars resuktCar = new Cars(resultCarID,carUser,year,resultMaker,resultModel,trim,body,transmission,vin,state,conditionScore,odoMeter,color,interior,mmr);
+				
+				searchResults.add(new Pair<Auctions, Cars>(auction, resuktCar));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return searchResults;
+	}
+	
+	public List<Pair<String, String>> getTop20PopularCarInSell() throws SQLException {
+		List<Pair<String, String>> searchResults = new ArrayList<>();
+		String selectAuctions =
+				"SELECT Maker, Model, COUNT(*) as numAuction "
+				+ "FROM Auctions JOIN Cars USING (CarID) "
+				+ "WHERE AuctionStatus = 'Succeed' OR AuctionStatus = 'Active' "
+				+ "GROUP BY Maker, Model "
+				+ "ORDER BY numAuction DESC "
+				+ "LIMIT 20;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectAuctions);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				String maker = results.getString("Maker");
+				String model = results.getString("Model");
+				
+				searchResults.add(new Pair<String, String>(maker, model));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return searchResults;
+	}
+	
+	public List<Pair<String, String>> getTop10CollectedCarModel() throws SQLException {
+		List<Pair<String, String>> searchResults = new ArrayList<>();
+		String selectAuctions =
+				"SELECT c.maker, c.model, count(col.collectionID) AS 'collection_count' "
+				+ "FROM Cars c "
+				+ "         INNER JOIN Auctions a "
+				+ "                    ON c.carID = a.carID "
+				+ "         INNER JOIN Collections col "
+				+ "                    ON col.auctionID = a.auctionID "
+				+ "GROUP BY c.maker, c.model "
+				+ "ORDER BY count(col.collectionID) DESC "
+				+ "LIMIT 10;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectAuctions);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				String maker = results.getString("c.maker");
+				String model = results.getString("c.model");
+				
+				searchResults.add(new Pair<String, String>(maker, model));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return searchResults;
+	}
+
+	public class Pair<T, U> {         
+	    public final T t;
+	    public final U u;
+
+	    public Pair(T t, U u) {         
+	        this.t= t;
+	        this.u= u;
+	    }
+
+		public T getT() {
+			return t;
+		}
+
+		public U getU() {
+			return u;
+		}
+	 }
 }

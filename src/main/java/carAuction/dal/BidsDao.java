@@ -224,7 +224,8 @@ public class BidsDao {
 		String selectBid =
 			"SELECT BidID,AuctionID,UserID,BidTime,BidPrice " +
 			"FROM Bids " +
-			"WHERE AuctionID=?;";
+			"WHERE AuctionID=? " +
+			"ORDER BY BidTime;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -258,5 +259,38 @@ public class BidsDao {
 			}
 		}
 		return bids;
+	}
+	
+	public Float getMaxPriceForAuction(int auctionID) throws SQLException {
+		Float maxPrice = -1.0F;
+		String selectBid =
+			"select AuctionID, max(BidPrice) as maxPrice from Bids where AuctionID = ? group by AuctionID;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectBid);
+			selectStmt.setInt(1, auctionID);
+			results = selectStmt.executeQuery();
+			UsersDao userDao = UsersDao.getInstance();
+			if (results.next()) {
+				maxPrice = results.getFloat("maxPrice");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return maxPrice;
 	}
 }
