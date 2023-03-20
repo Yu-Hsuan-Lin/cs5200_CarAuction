@@ -31,6 +31,11 @@ public class Collections {
     this.user = user;
     this.auction = auction;
   }
+  
+  public Collections(int collectionId) {
+	    this.CollectionId = collectionId;
+	    
+	  }
 
   public int getCollectionId() {
     return this.CollectionId;

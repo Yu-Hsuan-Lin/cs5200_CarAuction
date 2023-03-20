@@ -44,6 +44,15 @@ public class BidsDao {
 			insertStmt.setTimestamp(3, new Timestamp(bids.getBidTime().getTime()));
 			insertStmt.setFloat(4, bids.getBidPrice());
 			insertStmt.executeUpdate();
+			// Retrieve the auto-generated key and set it, so it can be used by the caller.
+			resultKey = insertStmt.getGeneratedKeys();
+			int bidID = -1;
+			if(resultKey.next()) {
+				bidID = resultKey.getInt(1);
+			} else {
+				throw new SQLException("Unable to retrieve auto-generated key.");
+			}
+			bids.setBidID(bidID);
 			return bids;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,7 +130,7 @@ public class BidsDao {
 	/**
 	 * Get the Bid record by fetching it from your MySQL instance.
 	 */
-	public Bids getBidById(String bidID) throws SQLException {
+	public Bids getBidById(int bidID) throws SQLException {
 		String selectBid =
 			"SELECT BidID,AuctionID,UserID,BidTime,BidPrice " +
 			"FROM Bids " +
@@ -132,7 +141,7 @@ public class BidsDao {
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectBid);
-			selectStmt.setString(1, bidID);
+			selectStmt.setInt(1, bidID);
 			results = selectStmt.executeQuery();
 			AuctionsDao auctionsDao = AuctionsDao.getInstance();
 			UsersDao userDao = UsersDao.getInstance();
@@ -166,7 +175,7 @@ public class BidsDao {
 	/**
 	 * Get the all the Bid for a user.
 	 */
-	public List<Bids> getBidForUser(Users user) throws SQLException {
+	public List<Bids> getBidsForUser(Users user) throws SQLException {
 		List<Bids> bids = new ArrayList<Bids>();
 		String selectBid =
 			"SELECT BidID,AuctionID,UserID,BidTime,BidPrice " +
@@ -210,7 +219,7 @@ public class BidsDao {
 	/**
 	 * Get the all the Bid for an auction.
 	 */
-	public List<Bids> getBidForAuction(Auctions auctions) throws SQLException {
+	public List<Bids> getBidsForAuction(Auctions auctions) throws SQLException {
 		List<Bids> bids = new ArrayList<Bids>();
 		String selectBid =
 			"SELECT BidID,AuctionID,UserID,BidTime,BidPrice " +

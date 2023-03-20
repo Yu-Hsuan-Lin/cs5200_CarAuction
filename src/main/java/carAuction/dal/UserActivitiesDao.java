@@ -40,15 +40,15 @@ public class UserActivitiesDao {
 			insertStmt.setTimestamp(3, new Timestamp(userActivities.getTimeStamp().getTime()));
 			insertStmt.executeUpdate();
 			
-			resultKey = insertStmt.getGeneratedKeys();
-			int ActivityID = -1;
-			if(resultKey.next()) {
-				ActivityID = resultKey.getInt(1);
-			} else {
-				throw new SQLException("Unable to retrieve auto-generated key.");
-			}
-			
-			userActivities.setActivityID(ActivityID);
+//			resultKey = insertStmt.getGeneratedKeys();
+//			String ActivityID = "-1";
+//			if(resultKey.next()) {
+//				ActivityID = resultKey.getString(1);
+//			} else {
+//				throw new SQLException("Unable to retrieve auto-generated key.");
+//			}
+//			
+//			userActivity.setActivityID(ActivityID);
 			
 			return userActivities;
 		} catch (SQLException e) {
@@ -113,7 +113,6 @@ public class UserActivitiesDao {
 				
 				return userActivity;
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;

@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Data access object (DAO) class to interact with the underlying Users table in your MySQL
@@ -79,11 +81,8 @@ public class UsersDao {
 			}
 		}
 	}
-
-	/**
-	 * Get the Users record by fetching it from your MySQL instance.
-	 * This runs a SELECT statement and returns a single Users instance.
-	 */
+	
+	
 	public Users getUserFromUserID(int userID) throws SQLException {
 		String selectUser = "SELECT UserID, FirstName, LastName, Address1, Address2, City, State,  Zipcode,  Country, Phone, Email, Password, SignUp from Users WHERE UserID=?;";
 		Connection connection = null;
@@ -133,10 +132,106 @@ public class UsersDao {
 		return null;
 	}
 	
-	/**
-	 * Update the password of the Persons instance.
-	 * This runs a UPDATE statement.
-	 */
+	public List<Users> getUsersFromEmail(String email)
+			throws SQLException {
+		List<Users> users = new ArrayList<Users>();
+		String selectUsers =
+			"SELECT UserID, FirstName, LastName, Address1, Address2, City, State,  Zipcode,  Country, Phone, Email, Password, SignUp from Users WHERE Email=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectUsers);
+			selectStmt.setString(1, email);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int userID = results.getInt("userID");
+				String firstName = results.getString("firstName");
+				String lastName = results.getString("lastName");
+				String address1 = results.getString("address1");
+				String address2 = results.getString("address2");
+				String city = results.getString("city");
+                String state = results.getString("state");
+                String zipcode = results.getString("zipcode");
+                String country = results.getString("country");
+                String phone = results.getString("phone");
+                String resultemail = results.getString("email");
+                String password = results.getString("password");
+                Date signUp = results.getDate("signUp");
+                
+                Users user = new Users(userID, firstName, lastName, address1, 
+			               address2, city, state,  zipcode,  
+			               country, phone, resultemail, password, signUp );				
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return users;
+	}
+	
+	public List<Users> getUsersFromEmailPassword(String email, String password)
+			throws SQLException {
+		List<Users> users = new ArrayList<Users>();
+		String selectUsers =
+			"SELECT UserID, FirstName, LastName, Address1, Address2, City, State,  Zipcode,  Country, Phone, Email, Password, SignUp from Users WHERE Email=? and Password= ?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectUsers);
+			selectStmt.setString(1, email);
+			selectStmt.setString(2, password);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int userID = results.getInt("userID");
+				String firstName = results.getString("firstName");
+				String lastName = results.getString("lastName");
+				String address1 = results.getString("address1");
+				String address2 = results.getString("address2");
+				String city = results.getString("city");
+                String state = results.getString("state");
+                String zipcode = results.getString("zipcode");
+                String country = results.getString("country");
+                String phone = results.getString("phone");
+                String resultemail = results.getString("email");
+                String resultpassword = results.getString("password");
+                Date signUp = results.getDate("signUp");
+                
+                Users user = new Users(userID, firstName, lastName, address1, 
+			               address2, city, state,  zipcode,  
+			               country, phone, resultemail, resultpassword, signUp );				
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return users;
+	}
 	
 	public Users updatepassword(Users user, String newpassword) throws SQLException {
 		String updateUser = "UPDATE Users SET password=? WHERE UserID=?;";
@@ -163,6 +258,57 @@ public class UsersDao {
 				updateStmt.close();
 			}
 		}
+	}
+	
+	public Users getUserFromCarId(int carID) throws SQLException {
+		String selectUser = "SELECT CarID, Users.UserID, FirstName, LastName, Address1, Address2, City, Users.State,  Zipcode,  Country, Phone, Email, Password, SignUp "
+				+ "from Users JOIN Cars USING (UserID) "
+				+ "WHERE CarID=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectUser);
+			selectStmt.setInt(1, carID);
+			
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int resultuserID = results.getInt("Users.UserID");
+				String firstName = results.getString("firstName");
+				String lastName = results.getString("lastName");
+				String address1 = results.getString("address1");
+				String address2 = results.getString("address2");
+				String city = results.getString("city");
+                String state = results.getString("state");
+                String zipcode = results.getString("zipcode");
+                String country = results.getString("country");
+                String phone = results.getString("phone");
+                String email = results.getString("email");
+                String password = results.getString("password");
+                Date signUp = results.getDate("signUp");
+			
+				Users User = new Users(resultuserID, firstName, lastName, address1, 
+						               address2, city, state,  zipcode,  
+						               country, phone, email, password, signUp );
+				return User;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
 	}
 
 	/**

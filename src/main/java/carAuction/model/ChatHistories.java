@@ -1,37 +1,44 @@
 package carAuction.model;
 
-import carAuction.model.ChatHistories.ServiceType;
 import java.util.Date;
 
 public class ChatHistories {
   protected int ChatID;
-  protected String CustomerServiceID;
-  protected String UserID;
+  protected CustomerServices CustomerService;
+  protected Users User;
   protected Date TimeStamp;
-  protected ServiceType ServiceType;
-  public enum ServiceType {
+  protected ServiceTypeValue ServiceType;
+  public enum ServiceTypeValue {
     Account, Payment, Auction, Bidding, Legal,Security,Privacy, Other
   };
 
-  public ChatHistories(int chatID, String customerServiceID, String userID, Date timeStamp, ServiceType serviceType) {
+  public ChatHistories(int chatID, CustomerServices customerService, Users user, Date timeStamp, ServiceTypeValue serviceType) {
     this.ChatID = chatID;
-    this.CustomerServiceID = customerServiceID;
-    this.UserID = userID;
+    this.CustomerService = customerService;
+    this.User = user;
     this.TimeStamp = timeStamp;
     this.ServiceType = serviceType;
   }
+  
+  public ChatHistories(CustomerServices customerService, Users user,
+			Date timeStamp, ServiceTypeValue serviceType) {
+	this.CustomerService = customerService;
+	this.User = user;
+	this.TimeStamp = timeStamp;
+	this.ServiceType = serviceType;}
 
-  public ChatHistories(int chatID, String customerServiceID, String userID) {
+
+  public ChatHistories(int chatID, CustomerServices customerService, Users user) {
     this.ChatID = chatID;
-    this.CustomerServiceID = customerServiceID;
-    this.UserID = userID;
+    this.CustomerService = customerService;
+    this.User = user;
   }
 
-  public ChatHistories.ServiceType getServiceType() {
+  public ChatHistories.ServiceTypeValue getServiceType() {
     return this.ServiceType;
   }
 
-  public void setServiceType(ChatHistories.ServiceType serviceType) {
+  public void setServiceType(ChatHistories.ServiceTypeValue serviceType) {
     this.ServiceType = serviceType;
   }
 
@@ -39,12 +46,12 @@ public class ChatHistories {
     return this.ChatID;
   }
 
-  public String getCustomerServiceID() {
-    return this.CustomerServiceID;
+  public CustomerServices getCustomerService() {
+    return this.CustomerService;
   }
 
-  public String getUserID() {
-    return this.UserID;
+  public Users getUser() {
+    return this.User;
   }
 
   public Date getTimeStamp() {
@@ -55,12 +62,12 @@ public class ChatHistories {
     this.ChatID = chatID;
   }
 
-  public void setCustomerServiceID(String customerServiceID) {
-    this.CustomerServiceID = customerServiceID;
+  public void setCustomerService(CustomerServices customerService) {
+    this.CustomerService = customerService;
   }
 
-  public void setUserID(String userID) {
-    this.UserID = userID;
+  public void setUser(Users user) {
+    this.User = user;
   }
 
   public void setTimeStamp(Date timeStamp) {

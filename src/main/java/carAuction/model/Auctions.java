@@ -68,7 +68,11 @@ public class Auctions {
 		this.user = user;
 		this.customerService = customerService;
 	}
-
+	//Bella
+	public Auctions(int auctionID) {
+		this.AuctionID = auctionID;
+	}
+	
 	public int getAuctionID() {
 		return this.AuctionID;
 	}

@@ -55,11 +55,17 @@ public class Cars {
 		this.Interior = interior;
 		this.MMR = mMR;
 	}
-	
+
 	public Cars(int carID, Users user) {
 		super();
 		this.CarID = carID;
 		this.user = user;
+	}
+	
+	//Bella
+	public Cars(int carID) {
+		super();
+		this.CarID = carID;
 	}
 	
 	public int getCarID() {
