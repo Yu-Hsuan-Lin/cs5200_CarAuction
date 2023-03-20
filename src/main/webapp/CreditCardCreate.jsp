@@ -17,12 +17,15 @@
 		<table border="1">
 		    <!--  -->
 			<tr>
-			    <td>
+		    	<td>
 				<label for="userID">userID</label>
 				 </td>
-				 <td>
-				<input id="userID" name="userID" value="${fn:escapeXml(param.userid)}">
-				</td>				 
+<%-- 				 <td>
+				 <label for="userID">${fn:escapeXml(param.userID)}</label>
+				  </td> --%>
+				<td>
+				<input id="userID" name="userID" value="${fn:escapeXml(param.userID)}">
+				</td> 
 			</tr>
 			<tr>
 			    <td>

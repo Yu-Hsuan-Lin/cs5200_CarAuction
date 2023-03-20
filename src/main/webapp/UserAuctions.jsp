@@ -33,14 +33,20 @@
                     <td><c:out value="${auction.getTitle()}" /></td>
                     <td><c:out value="${auction.getStartTime()}" /></td>
                     <td><c:out value="${auction.getEndTime()}" /></td>
-                    <td><c:out value="${auction.getCar()}" /></td>
+                    <td><c:out value="${auction.getCar().getCarID()}" /></td>
                     <td><c:out value="${auction.getHighlights()}" /></td>
                     <td><c:out value="${auction.getMinimumPrice()}" /></td>
                     <td><c:out value="${auction.getCurrentHighestPrice()}" /></td>
                     <td><c:out value="${auction.getAuctionStatus()}" /></td>
-                    <td><a href="auctiondelete?auctionid=<c:out value="${auction.getAuctionID()}"/>">Delete</a></td>
+                    <td><a href="auctiondelete?auctionID=<c:out value="${auction.getAuctionID()}"/>">Delete</a></td>
                 </tr>
             </c:forEach>
        </table>
+       <p>
+		<a href="auctioncreate?userID=<c:out value="${user.getUserID()}"/>">add a new Auction</a>
+		</p>
+		<p>
+		<button type="button" name="back" onclick="history.back()">back</button>
+		</p>
 </body>
 </html>

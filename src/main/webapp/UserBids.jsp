@@ -27,5 +27,11 @@
                 </tr>
             </c:forEach>
        </table>
+       <p>
+		<a href="bidcreate?userID=<c:out value="${user.getUserID()}"/>">add a new bid</a>
+		</p>
+		<p>
+		<button type="button" name="back" onclick="history.back()">back</button>
+		</p>
 </body>
 </html>

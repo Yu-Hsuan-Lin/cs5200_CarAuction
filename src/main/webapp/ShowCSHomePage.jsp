@@ -8,26 +8,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Update NameOnCard</title>
+<title>Customer Service HomePage</title>
 </head>
 <body>
-	<h1>Enter Your New Name On Card Below</h1>
-	<form action="creditcardupdate" method="post">
+	<h1>Customer Service HomePage</h1>
+	<form action="showcshomepage" method="get">
 		<p>
-			<label for="cardnumber">cardNumber</label>
-			<input id="cardnumber" name="cardnumber" value="${fn:escapeXml(param.cardnumber)}">
-		</p> 
-		<p>
-			<label for="newnameoncard">New Name On Card</label>
-			<input id="newnameoncard" name="newnameoncard" value="">
-		</p>
-		<p>
-			<input type="submit">
+			<div id="findUsers"><a href="findusers">Find Users</a></div>
+			<div id="findAuctions"><a href="findauctions">Find Auctions</a></div>
+			<div id="findChatHistories"><a href="findchathistories">Find ChatHistory</a></div>
+			<div id="generateReports"><a href="generatereports">Generate Reports</a></div>
 		</p>
 	</form>
 	<br/><br/>
-	<p>
-		<span id="successMessage"><b>${messages.success}</b></span>
-	</p>
+	
 </body>
 </html>

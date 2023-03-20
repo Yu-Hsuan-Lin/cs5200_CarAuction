@@ -48,9 +48,15 @@
                     <td><c:out value="${car.getColor()}" /></td>
                     <td><c:out value="${car.getInterior()}" /></td>
                     <td><c:out value="${car.getMMR()}" /></td>
-                    <td><a href="cardelete?carid=<c:out value="${car.getCarID()}"/>">Delete</a></td>
+                    <td><a href="cardelete?carID=<c:out value="${car.getCarID()}"/>">Delete</a></td>
                 </tr>
             </c:forEach>
        </table>
+       <p>
+		<a href="carcreate?userID=<c:out value="${user.getUserID()}"/>">add a new car</a>
+		</p>
+		<p>
+		<button type="button" name="back" onclick="history.back()">back</button>
+		</p>
 </body>
 </html>

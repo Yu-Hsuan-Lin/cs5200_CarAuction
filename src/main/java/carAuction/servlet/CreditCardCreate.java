@@ -66,7 +66,7 @@ public class CreditCardCreate extends HttpServlet {
     	        	
     	        	messages.put("success", "New CreditCard has been added !");
     	        	
-    	        	req.setAttribute("user", user);
+    	        	req.setAttribute("creditCard", creditCard);
         		}catch (SQLException e) {
         			e.printStackTrace();
         			throw new IOException(e);

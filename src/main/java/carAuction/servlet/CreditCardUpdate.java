@@ -32,10 +32,10 @@ public class CreditCardUpdate extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
 
-        
-        String cardNumber= req.getParameter("cardnumber");
+
+        String cardNumber = req.getParameter("cardnumber");
         if (cardNumber == null || cardNumber.trim().isEmpty()) {
-            messages.put("success", "Please enter a valid CardNumber.");
+            messages.put("success", "Please enter a valid cardNumber.");
         } else {
         	try {
         		CreditCards creditCard = creditCardsDao.getCreditCardByCardNumber(cardNumber);
@@ -46,10 +46,10 @@ public class CreditCardUpdate extends HttpServlet {
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
-	        }
-        }
+	        } 
+        }req.getRequestDispatcher("/CreditCardUpdate.jsp").forward(req, resp);
         
-        req.getRequestDispatcher("/CreditCardUpdate.jsp").forward(req, resp);
+       
 	}
 	
 	@Override
@@ -59,32 +59,31 @@ public class CreditCardUpdate extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
 
-        
-        String cardNumber= req.getParameter("cardnumber");
+
+        String cardNumber = req.getParameter("cardnumber");      
         if (cardNumber == null || cardNumber.trim().isEmpty()) {
-            messages.put("success", "Please enter a valid CardNumber.");
+            messages.put("success", "Please enter a valid cardNumber.");
         } else {
         	try {
         		CreditCards creditCard = creditCardsDao.getCreditCardByCardNumber(cardNumber);
         		if(creditCard == null) {
         			messages.put("success", "CreditCard does not exist. No update to perform.");
         		} else {
-        			String newNameOnCard = req.getParameter("nameoncard");
-        			
+        			String newNameOnCard = req.getParameter("newnameoncard");	
         			if (newNameOnCard == null || newNameOnCard.trim().isEmpty()) {
-        	            messages.put("success", "Please enter a valid NameOnCard.");
+        	            messages.put("success", "Please enter a valid new NameOnCard.");
         	        } else {
         	        	creditCard = creditCardsDao.updateNameOnCard(creditCard, newNameOnCard);
-        	        	messages.put("success", "Successfully updated " + cardNumber);
+        	        	messages.put("success", "NameOnCard has been updated successfully.");       
         	        }
         		}
-        		req.setAttribute("creditCard", creditCard);
-        	} catch (SQLException e) {
-				e.printStackTrace();
-				throw new IOException(e);
-	        }
-        }
-        
-        req.getRequestDispatcher("/CreditCardUpdate.jsp").forward(req, resp);
-    }
-}
+			req.setAttribute("creditCard", creditCard);
+		} catch (SQLException e) {
+		e.printStackTrace();
+		throw new IOException(e);
+		}
+		}
+		
+		req.getRequestDispatcher("/CreditCardUpdate.jsp").forward(req, resp);
+		}
+		}

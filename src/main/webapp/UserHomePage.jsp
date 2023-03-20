@@ -24,26 +24,26 @@
         	<c:forEach items="${users}" var="user" >
             
             <tr>
-            <th>FirstName</th><td><c:out value="${user.getFirstName()}" /></td>   	 
-            <th>Address1</th><td><c:out value="${user.getAddress1()}" /></td>	
+            <th>FirstName</th><td align="center" ><c:out value="${user.getFirstName()}" /></td>   	 
+            <th>Address1</th><td align="center"><c:out value="${user.getAddress1()}" /></td>	
             </tr>				
 			<tr>
-			<th>LastName</th><td><c:out value="${user.getLastName()}" /></td>
-			<th>Address2</th><td><c:out value="${user.getAddress2()}" /></td>
+			<th>LastName</th><td align="center"><c:out value="${user.getLastName()}" /></td>
+			<th>Address2</th><td align="center"><c:out value="${user.getAddress2()}" /></td>
 			</tr>				
 			<tr>	
-			<th>Phone</th><td><c:out value="${user.getPhone()}" /></td>
-			<th>City</th><td><c:out value="${user.getCity()}" /></td>
+			<th>Phone</th><td align="center"><c:out value="${user.getPhone()}" /></td>
+			<th>City</th><td align="center"><c:out value="${user.getCity()}" /></td>
 			</tr>
 		    
 		    <tr>
-		    <th>Email</th><td><c:out value="${user.getEmail()}" /></td>
-		    <th>State</th><td><c:out value="${user.getState()}" /></td>
+		    <th>Email</th><td align="center"><c:out value="${user.getEmail()}" /></td>
+		    <th>State</th><td align="center"><c:out value="${user.getState()}" /></td>
 		    </tr>
 			
 		    <tr>
-		    <tr><th>SignUp</th><td><c:out value="${user.getSignUp()}" /></td>
-		    <th>Zipcode</th><td><c:out value="${user.getZipcode()}" /></td>
+		    <tr><th>SignUp</th><td align="center"><c:out value="${user.getSignUp()}" /></td>
+		    <th>Zipcode</th><td align="center"><c:out value="${user.getZipcode()}" /></td>
 		    </tr>
 				           
             </c:forEach>
@@ -68,7 +68,12 @@
             <br> 
          	<li><a href="userpasswordupdate?userID=<c:out value="${user.getUserID()}"/>">&#128273; Update Password </a></li>         	
          	</c:forEach>       	
-       </ul>
+       	</ul>
+       	
+       	<p>
+       	
+        <a href="webapp/websitehomepage.jsp">Back to Website HomePage</a>
+        </p>
 	    
 </body>
 </html>
