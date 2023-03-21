@@ -117,7 +117,7 @@
 		</p>
 		
 		<p>
-        <a href="websitehomepage">Back to Website HomePage</a>
+        <a href="WebsiteHomePage.jsp">Back to Website HomePage</a>
         </p>
 	</form>
 	

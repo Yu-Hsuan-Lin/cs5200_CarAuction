@@ -58,11 +58,15 @@ public class UserCars extends HttpServlet {
         try {
         	Users user = new Users(Integer.parseInt(userID));
         	cars = carsDao.getCarForUser(user);
+        	
+        	 req.setAttribute("user", user);
+        	 req.setAttribute("cars", cars);
+        	 
         } catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);
         }
-        req.setAttribute("cars", cars);
+        
         req.getRequestDispatcher("/UserCars.jsp").forward(req, resp);
 	}
 }

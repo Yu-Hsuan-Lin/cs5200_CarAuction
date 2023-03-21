@@ -39,7 +39,7 @@
                 </tr>
             </c:forEach>
        </table>
-       <p>
+        <p>
 		<a href="creditcardcreate?userID=<c:out value="${user.getUserID()}"/>">add a new card</a>
 		</p>
 		<p>

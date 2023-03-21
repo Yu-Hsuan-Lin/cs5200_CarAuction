@@ -12,11 +12,12 @@
 </head>
 <body>
 	<h1>Enter Your New Name On Card Below</h1>
-	<form action="creditcardupdate" method="post">
-		<p>
-			<label for="cardnumber">cardNumber</label>
-			<input id="cardnumber" name="cardnumber" value="${fn:escapeXml(param.cardnumber)}">
-		</p> 
+	
+	<form action="creditcardupdate?cardNumber=<%= request.getParameter("cardNumber") %>" method="post">
+		<%-- <p>
+			<label for="cardNumber">cardNumber</label>
+			<input id="cardNumber" name="cardNumber" value="${fn:escapeXml(param.cardNumber)}">
+		</p>  --%>
 		<p>
 			<label for="newnameoncard">New Name On Card</label>
 			<input id="newnameoncard" name="newnameoncard" value="">
@@ -28,6 +29,10 @@
 	<br/><br/>
 	<p>
 		<span id="successMessage"><b>${messages.success}</b></span>
+	</p>
+	
+	<p>
+	<button type="button" name="back" onclick="history.back()">back</button>
 	</p>
 </body>
 </html>

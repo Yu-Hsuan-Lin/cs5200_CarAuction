@@ -57,11 +57,15 @@ public class UserCollections extends HttpServlet {
         try {
         	Users user = new Users(Integer.parseInt(userID));
         	collections = collectionsDao.getCollectionForUser(user);
+        	
+        	req.setAttribute("user", user);
+        	req.setAttribute("collections", collections);
+        	 
         } catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);
         }
-        req.setAttribute("collections", collections);
+       
         req.getRequestDispatcher("/UserCollections.jsp").forward(req, resp);
 	}
 }

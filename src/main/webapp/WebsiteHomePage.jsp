@@ -23,11 +23,10 @@
    		 <em >Best Place to Sell Your Second-hand Cars !</em>
    		 </p>
 	
-		<br/>
 	
 		<nav aria-label = 'primary-navigation' class = 'header__nav' align="center">
 		
-        
+   
         <p>
         <a href="usercreate">Create User</a>
         </p>
@@ -35,7 +34,10 @@
         <a href="userloginpage">User LogIn</a>
         </p>
         <p>
-        <a href="showcshomepage">CustomerService LogIn</a>
+        <a href="FindAuctions.jsp">Auctions Search</a>
+        </p>
+        <p>
+        <a href="showcshomepage">Admin LogIn</a>
         </p>
       
         </nav>

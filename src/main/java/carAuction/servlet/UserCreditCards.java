@@ -59,11 +59,14 @@ public class UserCreditCards extends HttpServlet {
         try {
         	Users user = new Users(Integer.parseInt(userID));
         	creditCards = creditCardsDao.getCreditCardsByUserID(user.getUserID());
+        	
+        	req.setAttribute("creditCards", creditCards);
+            req.setAttribute("user", user);
         } catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);
         }
-        req.setAttribute("creditCards", creditCards);
+        
         req.getRequestDispatcher("/UserCreditCards.jsp").forward(req, resp);
 	}
 }

@@ -51,7 +51,7 @@ public class CreditCardCreate extends HttpServlet {
         String userID = req.getParameter("userID");
         String CardNumber = req.getParameter("CardNumber");
         if (CardNumber == null || CardNumber.trim().isEmpty()) {
-            messages.put("success", "Invalid UseID");
+            messages.put("success", "Invalid CardNumber");
         } else {
         		try {
                 	Users user = usersDao.getUserFromUserID(Integer.parseInt(userID));

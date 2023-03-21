@@ -53,15 +53,15 @@
      		<c:forEach items="${users}" var="user" >
 		    <li><a href="usercreditcards?userID=<c:out value="${user.getUserID()}"/>">&#128179; CreditCards List</a>
 		    &nbsp;&nbsp;&nbsp;<a href="creditcardcreate?userID=<c:out value="${user.getUserID()}"/>">&#128179; Add CreditCard</a></li>
-		    <br>
-			<li><a href="userauctions?userID=<c:out value="${user.getUserID()}"/>">&#128176; Auctions List</a>
-			&nbsp;&nbsp;&nbsp;<a href="auctioncreate?userID=<c:out value="${user.getUserID()}"/>">&#128176; Add Auction</a></li>
 			<br>
 			<li><a href="usercars?userID=<c:out value="${user.getUserID()}"/>">&#128663; Cars List</a>
 			&nbsp;&nbsp;&nbsp;<a href="carcreate?userID=<c:out value="${user.getUserID()}"/>">&#128663; Add Car</a></li>
 			<br>
+			<li><a href="userauctions?userID=<c:out value="${user.getUserID()}"/>">&#128176; Auctions List</a>
+			&nbsp;&nbsp;&nbsp;<a href="auctioncreate?userID=<c:out value="${user.getUserID()}"/>">&#128176; Add Auction</a></li>
+			<br>
 			<li><a href="userbids?userID=<c:out value="${user.getUserID()}"/>">&#128587; Bids List</a>
-			&nbsp;&nbsp;&nbsp;<a href="bidcreate?userID=<c:out value="${user.getUserID()}"/>">&#128587; Add Bid</a></li>
+			&nbsp;&nbsp;&nbsp;<a href="findbids?userID=<c:out value="${user.getUserID()}"/>">&#128587; Add Bid</a></li>
 			<br>
             <li><a href="usercollections?userID=<c:out value="${user.getUserID()}"/>">&#128212; Collections List</a>
             &nbsp;&nbsp;&nbsp;<a href="collectioncreate?userID=<c:out value="${user.getUserID()}"/>">&#128212; Add Collection</a></li>
@@ -71,8 +71,7 @@
        	</ul>
        	
        	<p>
-       	
-        <a href="webapp/websitehomepage.jsp">Back to Website HomePage</a>
+        <a href="WebsiteHomePage.jsp">Back to Website HomePage</a>
         </p>
 	    
 </body>

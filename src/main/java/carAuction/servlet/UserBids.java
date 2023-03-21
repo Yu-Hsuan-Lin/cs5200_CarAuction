@@ -57,11 +57,14 @@ public class UserBids extends HttpServlet {
         try {
         	Users user = new Users(Integer.parseInt(userID));
         	bids = bidsDao.getBidsForUser(user);
+        	
+        	req.setAttribute("user", user);
+        	req.setAttribute("bids", bids);
         } catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);
         }
-        req.setAttribute("bids", bids);
+        
         req.getRequestDispatcher("/UserBids.jsp").forward(req, resp);
 	}
 }

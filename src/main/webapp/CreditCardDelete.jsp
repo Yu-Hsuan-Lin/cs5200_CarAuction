@@ -12,13 +12,10 @@
 </head>
 <body>
 	<h1>${messages.title}</h1>
-	<form action="creditcarddelete" method="post">
-		<p>
-			<div <c:if test="${messages.disableSubmit}">style="display:none"</c:if>>
-				<label for="cardNumber">cardNumber</label>
-				<input id="cardNumber" name="cardNumber" value="${fn:escapeXml(param.cardNumber)}">
-			</div>
-		</p>
+	
+	
+	<form action="creditcarddelete?cardNumber=<%= request.getParameter("cardNumber") %>" method="post">
+		
 		<p>
 			<span id="submitButton" <c:if test="${messages.disableSubmit}">style="display:none"</c:if>>
 			<input type="submit">

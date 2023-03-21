@@ -12,21 +12,10 @@
 </head>
 <body>
 	<h1>Add a New CreditCard</h1>
-
-	<form action="creditcardcreate" method="post">
+	
+	<form action="creditcardcreate?userID=<%= request.getParameter("userID") %>" method="post">
 		<table border="1">
-		    <!--  -->
-			<tr>
-		    	<td>
-				<label for="userID">userID</label>
-				 </td>
-<%-- 				 <td>
-				 <label for="userID">${fn:escapeXml(param.userID)}</label>
-				  </td> --%>
-				<td>
-				<input id="userID" name="userID" value="${fn:escapeXml(param.userID)}">
-				</td> 
-			</tr>
+		   
 			<tr>
 			    <td>
 				<label for="CardNumber">CardNumber</label>
@@ -76,6 +65,10 @@
 	<br/><br/>
 	<p>
 		<span id="successMessage"><b>${messages.success}</b></span>
+	</p>
+	
+	<p>
+	<a href="usercreditcards?userID=<%= request.getParameter("userID") %>">CreditCards List</a>
 	</p>
 </body>
 </html>

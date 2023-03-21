@@ -12,11 +12,9 @@
 </head>
 <body>
 	<h1>Enter Your New Password Below</h1>
-	<form action="userpasswordupdate" method="post">
-		<p>
-			<label for="userID">UserID</label>
-			<input id="userID" name="userID" value="${fn:escapeXml(param.userID)}">
-		</p> 
+	
+	<form action="userpasswordupdate?userID=<%= request.getParameter("userID") %>" method="post">
+	
 		<p>
 			<label for="password">New Password</label>
 			<input id="password" name="password" value="">
@@ -28,6 +26,10 @@
 	<br/><br/>
 	<p>
 		<span id="successMessage"><b>${messages.success}</b></span>
+	</p>
+	
+	<p>
+	<button type="button" name="back" onclick="history.back()">back</button>
 	</p>
 </body>
 </html>
