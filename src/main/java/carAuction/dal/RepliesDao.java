@@ -221,6 +221,7 @@ public class RepliesDao {
 		}
 		return replies;
 	}
+	
 
 	public List<Replies> getReplyForUser(Users user) throws SQLException {
 		List<Replies> replies = new ArrayList<Replies>();
