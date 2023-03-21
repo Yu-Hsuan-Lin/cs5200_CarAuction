@@ -89,5 +89,7 @@
 	</table>
 	<br>
 	
+	<div><a href="ShowCSHomePage.jsp">Back to Customer Home Page</a></div>
+	
 </body>
 </html>
