@@ -316,13 +316,13 @@ public class UsersDao {
 	 * This runs a DELETE statement.
 	 */
 	public Users delete(Users user) throws SQLException {
-		String deleteUser = "DELETE FROM Users WHERE UserID=?;";
+		String deleteUser = "DELETE FROM Users WHERE Email=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
 		try {
 			connection = connectionManager.getConnection();
 			deleteStmt = connection.prepareStatement(deleteUser);
-			deleteStmt.setInt(1, user.getUserID());
+			deleteStmt.setString(1, user.getEmail());
 			deleteStmt.executeUpdate();
 
 			// Return null so the caller can no longer operate on the Users instance.
@@ -338,5 +338,103 @@ public class UsersDao {
 				deleteStmt.close();
 			}
 		}
+	}
+	
+	public List<Users> getUsersFromFirstName(String firstName) throws SQLException {
+		List<Users> users = new ArrayList<Users>();
+		String selectUser = "SELECT UserID, FirstName, LastName, Address1, Address2, City, State,  Zipcode,  Country, Phone, Email, Password, SignUp from Users WHERE FirstName=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectUser);
+			selectStmt.setString(1, firstName);
+
+			results = selectStmt.executeQuery();
+
+			while(results.next()) {
+				int userID = results.getInt("userID");
+				String resultFirstName = results.getString("FirstName");
+				String lastName = results.getString("lastName");
+				String address1 = results.getString("address1");
+				String address2 = results.getString("address2");
+				String city = results.getString("city");
+                String state = results.getString("state");
+                String zipcode = results.getString("zipcode");
+                String country = results.getString("country");
+                String phone = results.getString("phone");
+                String email = results.getString("email");
+                String password = results.getString("password");
+                Date signUp = results.getDate("signUp");
+
+				Users user = new Users(userID, resultFirstName, lastName, address1, 
+						               address2, city, state,  zipcode,  
+						               country, phone, email, password, signUp );
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return users;
+	}
+
+	public List<Users> getAllUsers() throws SQLException {
+		List<Users> users = new ArrayList<Users>();
+		String selectUser = "SELECT UserID, FirstName, LastName, Address1, Address2, City, State,  Zipcode,  Country, Phone, Email, Password, SignUp from Users";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectUser);
+			results = selectStmt.executeQuery();
+
+			while(results.next()) {
+				int userID = results.getInt("userID");
+				String firstName = results.getString("FirstName");
+				String lastName = results.getString("lastName");
+				String address1 = results.getString("address1");
+				String address2 = results.getString("address2");
+				String city = results.getString("city");
+                String state = results.getString("state");
+                String zipcode = results.getString("zipcode");
+                String country = results.getString("country");
+                String phone = results.getString("phone");
+                String email = results.getString("email");
+                String password = results.getString("password");
+                Date signUp = results.getDate("signUp");
+
+				Users user = new Users(userID, firstName, lastName, address1, 
+						               address2, city, state,  zipcode,  
+						               country, phone, email, password, signUp );
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return users;
 	}
 }

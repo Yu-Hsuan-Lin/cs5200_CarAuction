@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.HashMap;
 
 public class BidsDao {
 	protected ConnectionManager connectionManager;
@@ -224,7 +225,8 @@ public class BidsDao {
 		String selectBid =
 			"SELECT BidID,AuctionID,UserID,BidTime,BidPrice " +
 			"FROM Bids " +
-			"WHERE AuctionID=?;";
+			"WHERE AuctionID=? " +
+			"ORDER BY BidTime;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -258,5 +260,143 @@ public class BidsDao {
 			}
 		}
 		return bids;
+	}
+	
+	public Float getMaxPriceForAuction(int auctionID) throws SQLException {
+		Float maxPrice = -1.0F;
+		String selectBid =
+			"select AuctionID, max(BidPrice) as maxPrice from Bids where AuctionID = ? group by AuctionID;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectBid);
+			selectStmt.setInt(1, auctionID);
+			results = selectStmt.executeQuery();
+			UsersDao userDao = UsersDao.getInstance();
+			if (results.next()) {
+				maxPrice = results.getFloat("maxPrice");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return maxPrice;
+	}
+	
+	public List<HashMap<String, String>> getHighestBids() throws SQLException {
+		String selectBid =
+				"SELECT AuctionID, Title, BidID, Bids.BidPrice as HighestBid, Bids.UserID as BidderID, CONCAT(Users.FirstName, ' ', Users.LastName) as Bidder " +
+				"FROM Auctions " +
+				"LEFT JOIN Bids USING (AuctionID) " +
+				"LEFT JOIN Users ON Bids.UserID = Users.UserID " +
+				"WHERE Bids.BidPrice = ( " +
+				"SELECT MAX(BidPrice) FROM Bids WHERE Bids.AuctionID = Auctions.AuctionID);";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		List<HashMap<String, String>> resultList = new ArrayList<>();
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectBid);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				HashMap<String, String> resultMap = new HashMap<>();
+				String bidID = Integer.toString(results.getInt("BidID"));
+				String highestBidPrice = Float.toString(results.getFloat("HighestBid"));
+				String auctionId = Integer.toString(results.getInt("AuctionID"));
+				String bidderId = Integer.toString(results.getInt("BidderID"));
+				String bidder = results.getString("Bidder");
+				String title = results.getString("Title");
+//				String auction = auctionsDao.getAuctionById(results.getInt("AuctionID"));	
+				// String bidPrice = results.getFloat("HighestBid");
+//				String user = userDao.getUserFromUserID(results.getInt("Bidder"));
+				resultMap.put("BidID", bidID);
+				resultMap.put("AuctionID", auctionId);
+				resultMap.put("HighestBidPrice", highestBidPrice);
+				resultMap.put("BidderId", bidderId);
+				resultMap.put("Bidder", bidder);
+				resultMap.put("Title", title);
+				resultList.add(resultMap);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return resultList;
+	}
+
+	public List<HashMap<String, String>> getHighestBidsByAuctionID(Auctions auction) throws SQLException {
+		String selectBid =
+				"SELECT AuctionID, Title, BidID, Bids.BidPrice as HighestBid, Bids.UserID as BidderID, CONCAT(FirstName, ' ', LastName) as Bidder " +
+				"FROM Auctions " +
+				"LEFT JOIN Bids USING (AuctionID) " +
+				"LEFT JOIN Users ON Bids.UserID = Users.UserID " +
+				"WHERE Bids.BidPrice = ( " +
+				"SELECT MAX(BidPrice) FROM Bids WHERE Bids.AuctionID = Auctions.AuctionID) && Bids.AuctionID=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		List<HashMap<String, String>> resultList = new ArrayList<>();
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectBid);
+			selectStmt.setInt(1, auction.getAuctionID());
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				HashMap<String, String> resultMap = new HashMap<>();
+				String bidID = Integer.toString(results.getInt("BidID"));
+				String highestBidPrice = Float.toString(results.getFloat("HighestBid"));
+				String auctionId = Integer.toString(results.getInt("AuctionID"));
+				String bidderId = Integer.toString(results.getInt("BidderID"));
+				String bidder = results.getString("Bidder");
+				String title = results.getString("Title");
+//				String auction = auctionsDao.getAuctionById(results.getInt("AuctionID"));	
+				// String bidPrice = results.getFloat("HighestBid");
+//				String user = userDao.getUserFromUserID(results.getInt("Bidder"));
+				resultMap.put("BidID", bidID);
+				resultMap.put("AuctionID", auctionId);
+				resultMap.put("HighestBidPrice", highestBidPrice);
+				resultMap.put("BidderId", bidderId);
+				resultMap.put("Bidder", bidder);
+				resultMap.put("Title", title);
+				resultList.add(resultMap);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
 	}
 }

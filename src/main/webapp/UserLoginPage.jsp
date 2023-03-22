@@ -34,7 +34,7 @@
 			<input id="password" name="password" value="${fn:escapeXml(param.password)}">
 		</p>
 		<p>
-			<input type="submit">
+			<input type="submit" value="submit">
 			
 		</p>
 	</form>

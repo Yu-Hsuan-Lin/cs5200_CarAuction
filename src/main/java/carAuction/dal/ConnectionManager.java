@@ -37,6 +37,7 @@ public class ConnectionManager {
 	private final String user = "root";
 	// Password for the user.
 	private final String password = "Bella888!";
+	// private final String password = "Bella888!";
 	// URI to your database server. If running on the same machine, then this is "localhost".
 	private final String hostName = "localhost";
 	// Port to your database server. By default, this is 3307.

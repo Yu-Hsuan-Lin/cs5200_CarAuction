@@ -15,7 +15,7 @@
 	<form action="showcshomepage" method="get">
 		<p>
 			<div id="findUsers"><a href="findusers">Find Users</a></div>
-			<div id="findAuctions"><a href="findauctions">Find Auctions</a></div>
+			<div id="findAuctionsForCS"><a href="findauctionsforcs">Find Auctions</a></div>
 			<div id="findChatHistories"><a href="findchathistories">Find ChatHistory</a></div>
 			<div id="generateReports"><a href="generatereports">Generate Reports</a></div>
 		</p>

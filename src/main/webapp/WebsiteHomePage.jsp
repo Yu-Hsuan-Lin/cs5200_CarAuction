@@ -34,9 +34,6 @@
         <a href="userloginpage">User LogIn</a>
         </p>
         <p>
-        <a href="FindAuctions.jsp">Auctions Search</a>
-        </p>
-        <p>
         <a href="showcshomepage">Admin LogIn</a>
         </p>
       

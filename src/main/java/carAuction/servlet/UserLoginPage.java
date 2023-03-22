@@ -38,8 +38,32 @@ public class UserLoginPage extends HttpServlet {
         
         // Retrieve and validate name.
         // email is retrieved from the URL query string.
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
+        
+        String email = "";
+        String password = "";
+        if (req.getParameter("userID") != null) {
+        	int userID = -1;
+            if (req.getParameter("userID") != null) {
+                try {
+                	userID = Integer.parseInt(req.getParameter("userID"));
+                } catch (NumberFormatException e) {
+                	e.printStackTrace();
+        			throw new IOException(e);
+                }
+            }
+
+            Users currentUser = null;
+            try {
+    			currentUser = usersDao.getUserFromUserID(userID);
+    		} catch (SQLException e) {
+    			e.printStackTrace();
+    		}
+            email = currentUser.getEmail();
+            password = currentUser.getpassword();
+        } else {
+        	email = req.getParameter("email");
+            password = req.getParameter("password");
+        }
         
         
         if (email == null || email.trim().isEmpty()) {
@@ -56,6 +80,7 @@ public class UserLoginPage extends HttpServlet {
         	messages.put("success", "Displaying results for " + email);
         	// Save the previous search term, so it can be used as the default
         	
+        	
         	req.setAttribute("users", users);
             req.getRequestDispatcher("/UserHomePage.jsp").forward(req, resp);
         }
@@ -70,8 +95,32 @@ public class UserLoginPage extends HttpServlet {
         req.setAttribute("messages", messages);
 
         List<Users> users = new ArrayList<Users>();
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
+        
+        String email = "";
+        String password = "";
+        if (req.getParameter("userID") != null) {
+        	int userID = -1;
+            if (req.getParameter("userID") != null) {
+                try {
+                	userID = Integer.parseInt(req.getParameter("userID"));
+                } catch (NumberFormatException e) {
+                	e.printStackTrace();
+        			throw new IOException(e);
+                }
+            }
+
+            Users currentUser = null;
+            try {
+    			currentUser = usersDao.getUserFromUserID(userID);
+    		} catch (SQLException e) {
+    			e.printStackTrace();
+    		}
+            email = currentUser.getEmail();
+            password = currentUser.getpassword();
+        } else {
+        	email = req.getParameter("email");
+            password = req.getParameter("password");
+        }
         
         if (email == null || email.trim().isEmpty()) {
             messages.put("success", "Email address is required for SignIn.");
@@ -92,7 +141,7 @@ public class UserLoginPage extends HttpServlet {
 				req.setAttribute("users", users);
 	            
 	            req.getRequestDispatcher("/UserHomePage.jsp").forward(req, resp);
-			}	
+			}
         }
         
     }
