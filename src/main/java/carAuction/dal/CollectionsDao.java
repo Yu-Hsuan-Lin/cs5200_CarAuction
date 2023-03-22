@@ -7,6 +7,9 @@ import java.sql.SQLException;
 
 import carAuction.model.*;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 public class CollectionsDao {
@@ -41,15 +44,6 @@ public class CollectionsDao {
       insertStmt.setBoolean(3, collection.getPriceChangeAlert());
       insertStmt.setBoolean(4, collection.getStatusChangeAlert());
       insertStmt.executeUpdate();
-      // Retrieve the auto-generated key and set it, so it can be used by the caller.
-      resultKey = insertStmt.getGeneratedKeys();
-      int collectionID = -1;
-      if(resultKey.next()) {
-    	  collectionID = resultKey.getInt(1);
-      } else {
-    	 throw new SQLException("Unable to retrieve auto-generated key.");
-      }
-      collection.setCollectionId(collectionID);
 
       return collection;
 
@@ -166,6 +160,57 @@ public class CollectionsDao {
     }
     return null;
   }
+  
+	public List<Collections> getCollectionForUser(Users user) throws SQLException {
+		List<Collections> Collections = new ArrayList<Collections>();
+		String selectCollection =
+			"SELECT CollectionId,UserID,AuctionID,PriceChangeAlert,StatusChangeAlert " +
+			"FROM Collections " +
+			"WHERE UserID=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCollection);
+			selectStmt.setInt(1, user.getUserID());
+			results = selectStmt.executeQuery();
+			
+			//!!!-----------no auction class yet-------------------!!!
+			AuctionsDao auctionsDao = AuctionsDao.getInstance();
+			
+			while(results.next()) {
+				int resultCollectionID = results.getInt("CollectionID");
+				
+				//!!!-----------no auction class yet-------------------!!!
+				int auctionID = results.getInt("AuctionID");
+				Auctions auction = auctionsDao.getAuctionById(auctionID);
+				
+				Boolean PriceChangeAlert = results.getBoolean("PriceChangeAlert");
+		        Boolean StatusChangeAlert = results.getBoolean("StatusChangeAlert");
+		        
+				Collections Collection = new Collections(resultCollectionID, user,
+			            auction, PriceChangeAlert, StatusChangeAlert);
+				
+				Collections.add(Collection);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return Collections;
+	}
+  
 }
 
 

@@ -42,6 +42,7 @@ public class FindBids extends HttpServlet {
 	protected UsersDao usersDao;
 	protected AuctionsDao auctionsDao;
 	protected CarsDao carsDao;
+	protected ForumsDao forumsDao;
 	
 	@Override
 	public void init() throws ServletException {
@@ -49,6 +50,7 @@ public class FindBids extends HttpServlet {
 		usersDao = UsersDao.getInstance();
 		auctionsDao = AuctionsDao.getInstance();
 		carsDao = CarsDao.getInstance();
+		forumsDao = ForumsDao.getInstance();
 	}
 	
 	@Override
@@ -60,6 +62,7 @@ public class FindBids extends HttpServlet {
 
         List<Bids> bids = new ArrayList<>();
         List<Pair<Auctions, Cars>> auctionsAndCars = new ArrayList<>();
+        List<Forums> forums = new ArrayList<Forums>();
         
         int auctionid = -1;
         try {
@@ -81,10 +84,20 @@ public class FindBids extends HttpServlet {
     			e.printStackTrace();
     			throw new IOException(e);
             }
+        	try {
+        		Auctions auction = auctionsDao.getAuctionById(auctionid);
+        		forums = forumsDao.getForumForAuction(auction);
+        		messages.put("success", "Displaying Forums posted for Autcion " + auctionid);
+        		req.setAttribute("forums", forums);
+            } catch (SQLException e) {
+    			e.printStackTrace();
+    			throw new IOException(e);
+            }
         	messages.put("success", "Displaying results for Auction " + auctionid);
         }
         req.setAttribute("bids", bids);
         req.setAttribute("auctionsAndCars", auctionsAndCars);
+        req.setAttribute("forums", forums);
         
         req.getRequestDispatcher("/FindDetailAuction.jsp").forward(req, resp);
 	}
@@ -98,6 +111,7 @@ public class FindBids extends HttpServlet {
 
         List<Bids> bids = new ArrayList<>();
         List<Pair<Auctions, Cars>> auctionsAndCars = new ArrayList<>();
+        List<Forums> forums = new ArrayList<Forums>();
         
         int auctionid = -1;
         int userID = -1;
@@ -140,6 +154,15 @@ public class FindBids extends HttpServlet {
         			e.printStackTrace();
         			throw new IOException(e);
                 }
+            	try {
+            		Auctions auction = auctionsDao.getAuctionById(auctionid);
+            		forums = forumsDao.getForumForAuction(auction);
+            		messages.put("success", "Displaying Forums posted for Autcion " + auctionid);
+            		req.setAttribute("forums", forums);
+                } catch (SQLException e) {
+        			e.printStackTrace();
+        			throw new IOException(e);
+                }
             	messages.put("success", "Displaying results for Auction " + auctionid);
             	// Save the previous search term, so it can be used as the default
             	// in the input box when rendering FindUsers.jsp.
@@ -149,6 +172,7 @@ public class FindBids extends HttpServlet {
         }
         req.setAttribute("bids", bids);
         req.setAttribute("auctionsAndCars", auctionsAndCars);
+        req.setAttribute("forums", forums);
         
         req.getRequestDispatcher("/FindDetailAuction.jsp").forward(req, resp);
     }

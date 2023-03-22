@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.HashMap;
 
 import carAuction.model.*;
 
@@ -486,7 +487,7 @@ protected ConnectionManager connectionManager;
 		ResultSet results = null;
 		CarsDao carDao = CarsDao.getInstance();
 		UsersDao usersDao = UsersDao.getInstance();
-		CustomerServicesDao customerServiceDao = CustomerServicesDao.getInstance();
+		CustomerServicesDao customerServicesDao = CustomerServicesDao.getInstance();
 		try {
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectAuctions);
@@ -504,9 +505,10 @@ protected ConnectionManager connectionManager;
 				Float minimumPrice = results.getFloat("MinimumPrice");
 				Float currentHighestPrice = results.getFloat("CurrentHighestPrice");
 				Auctions.AuctionStatusValue auctionStatus = Auctions.AuctionStatusValue.valueOf(results.getString("AuctionStatus"));
+				CustomerServices resultCustomerService = customerServicesDao.getCustomerServiceById(results.getInt("CustomerServiceID"));
 				Boolean priceChangeAlert = results.getBoolean("PriceChangeAlert");
 				
-				Auctions auction = new Auctions(auctionID,title,startTime,endTime,car,user,highlights,pictures,minimumPrice,currentHighestPrice,auctionStatus,customerServices,priceChangeAlert);
+				Auctions auction = new Auctions(auctionID,title,startTime,endTime,car,user,highlights,pictures,minimumPrice,currentHighestPrice,auctionStatus,resultCustomerService,priceChangeAlert);
 				auctions.add(auction);
 			}
 		} catch (SQLException e) {
@@ -819,6 +821,71 @@ protected ConnectionManager connectionManager;
 		}
 		return searchResults;
 	}
+	
+	public List<HashMap<String, String>> getMonthlySales() throws SQLException {
+		List<HashMap<String, String>> resultList = new ArrayList<>();
+		String selectAuctions =
+				"SELECT YEAR(EndTime) AS year, MONTH(EndTime) AS month, SUM(CurrentHighestPrice) AS total_sales " +
+				"FROM Auctions " +
+				"WHERE AuctionStatus = 'Succeed' " +
+				"GROUP BY year, month " + 
+				" HAVING total_sales > 20000 " +
+				" ORDER BY total_sales DESC; ";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectAuctions);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				HashMap<String, String> resultMap = new HashMap<>();
+				String year = Integer.toString(results.getInt("year"));
+				String month = Integer.toString(results.getInt("month"));
+				String total_sales = Float.toString(results.getFloat("total_sales"));
+				resultMap.put("year", year);
+				resultMap.put("month", month);
+				resultMap.put("total_sales", total_sales);
+				resultList.add(resultMap);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return resultList;
+
+	}
+	
+//	public List<Auctions> getHighestPriceForEachAuction(CustomerServices customerServices) throws SQLException {
+//	List<Auctions> auctions = new ArrayList<Auctions>();
+//	String selectAuctions =
+//			"SELECT Auction.AuctionID, Auction.Title, Bid.BidPrice as HighestBid, Bid.UserID as Bidder" +
+//			"FROM Auction" +
+//			"LEFT JOIN Bid ON Auction.AuctionID = Bid.AuctionID" +
+//			"WHERE Bid.BidPrice = (" +
+//			"SELECT MAX(BidPrice) FROM Bid WHERE Bid.AuctionID = Auction.AuctionID" +
+//			");";
+//	Connection connection = null;
+//	PreparedStatement selectStmt = null;
+//	ResultSet results = null;
+//	CarsDao carDao = CarsDao.getInstance();
+//	UsersDao usersDao = UsersDao.getInstance();
+//	CustomerServicesDao customerServicesDao = CustomerServicesDao.getInstance();
+//	try {
+//		
+//	
+//	}
+//}
 
 	public class Pair<T, U> {         
 	    public final T t;

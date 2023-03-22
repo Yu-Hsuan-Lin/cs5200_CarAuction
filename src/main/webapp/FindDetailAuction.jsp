@@ -11,11 +11,11 @@
 <title>Find Auctions</title>
 </head>
 <body>
-	<form action="findbids?auctionid=<%= request.getParameter("auctionid") %>" method="post">
+	<form action="findbids?currentUserID=<%= request.getParameter("currentUserID") %>&auctionid=<%= request.getParameter("auctionid") %>" method="post">
 		<h1>Add a New Bid for Current Auction</h1>
 		<p>
 			<label for="userID">UserID</label>
-			<input id="userID" name="userID" value="${fn:escapeXml(param. userID)}">
+			<input id="userID" name="userID" value="${fn:escapeXml(param.userID)}">
 		</p>
 		<p>
 			<label for="bidPrice">Bid Price</label>
@@ -23,7 +23,7 @@
 		</p>
 		
 		<p>
-			<input type="submit">
+			<input type="submit" value="submit">
 			<br/><br/><br/>
 			<span id="successMessage"><b>${messages.success}</b></span>
 		</p>
@@ -59,7 +59,7 @@
             </tr>
             <c:forEach items="${auctionsAndCars}" var="pair" >
                 <tr>
-                	<td><a href="findbids?auctionid=<c:out value="${pair.getT().getAuctionID()}"/>"><c:out value="${pair.getT().getAuctionID()}" /></a></td>
+                	<td><a href="findbids?currentUserID=<%= request.getParameter("currentUserID") %>&auctionid=<c:out value="${pair.getT().getAuctionID()}"/>"><c:out value="${pair.getT().getAuctionID()}" /></a></td>
                     <td><c:out value="${pair.getT().getTitle()}" /></td>
                     <td><fmt:formatDate value="${pair.getT().getStartTime()}" pattern="yyyy-MM-dd"/></td>
                     <td><fmt:formatDate value="${pair.getT().getEndTime()}" pattern="yyyy-MM-dd"/></td>
@@ -102,13 +102,42 @@
                 <tr>
                     <td><c:out value="${bid.getBidID()}" /></td>
                     <td><c:out value="${bid.getAuction().getAuctionID()}" /></td>
-                    <%-- <td><a href="finduser?userid=<c:out value="${bid.getUser().getUserID()}"/>"><c:out value="${bid.getUser().getUserID()}" /></a></td> --%>
                     <td><c:out value="${bid.getUser().getUserID()}" /></td>
                     <td><c:out value="${bid.getBidTime()}" /></td>
                     <td><c:out value="${bid.getBidPrice()}" /></td>
                 </tr>
             </c:forEach>
        </table>
-       <a href="findauctions?auctionid=<c:out value="${bid.getAuction().getAuctionID()}"/>"><c:out value="Back to Auctions Page" /></a>
+       <br>
+       <h1>Forum for Current Auction</h1>
+			<table border="1">
+			    <tr>
+			    
+			    <th>ForumID</th>
+			    <th>AuctionID</th>
+			    <th>UserID</th>
+			    <th>Created Time</th>
+			    <th>Content</th>
+			    <th>Replies</th>
+			    <th>Update Question</th>
+			    <th>Delete Question</th>
+			
+			    </tr>
+			    <c:forEach items="${forums}" var="forums" >
+			        <tr>
+			            <td><c:out value="${forums.getForumID()}" /></td>
+			            <td><c:out value="${forums.getAuction().getAuctionID()}" /></td>
+			            <td><c:out value="${forums.getUser().getUserID()}" /></td>
+			            <td><fmt:formatDate value="${forums.getTimeStamp()}" pattern="MM-dd-yyyy hh:mm:sa"/></td>
+			            <td><c:out value="${forums.getContent()}" /></td>
+			            <td><a href="auctionforumreplies?currentUserID=<%= request.getParameter("currentUserID") %>&forumid=<c:out value="${forums.getForumID()}"/>">Question Replies</a></td>
+			            <td><a href="forumupdate?currentUserID=<%= request.getParameter("currentUserID") %>&forumid=<c:out value="${forums.getForumID()}"/>">Update</a></td>
+			            <td><a href="forumdelete?currentUserID=<%= request.getParameter("currentUserID") %>&forumid=<c:out value="${forums.getForumID()}"/>">Delete</a></td>
+			            
+			        </tr>
+			    </c:forEach>
+			</table>
+		<br>
+       <a href="findauctions?currentUserID=<%= request.getParameter("currentUserID") %>&auctionid=<c:out value="${auctionsAndCars.get(0).getT().getAuctionID()}"/>"><c:out value="Back to Auctions Page" /></a>
 </body>
 </html>

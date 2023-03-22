@@ -70,12 +70,15 @@
 			<input id="mmr" name="mmr" value="">
 		</p>
 		<p>
-			<input type="submit">
+			<input type="submit" value="submit">
 		</p>
 	</form>
 	<br/><br/>
 	<p>
 		<span id="successMessage"><b>${messages.success}</b></span>
 	</p>
+	<p>
+		<button type="button" name="Return to Auction Page" onclick="history.back()">back</button>
+		</p>
 </body>
 </html>

@@ -14,7 +14,7 @@
 	<table border="1" style="border:none;">
         <tr>
             <th style="text-align:left;vertical-align:top;border:none;padding-right:50px;">
-	            <form action="findauctions_id" method="post">
+	            <form action="findauctions_id?currentUserID=<%= request.getParameter("currentUserID") %>" method="post">
 					<h3>Search for an Auction by Auction ID</h3>
 						<p>
 							<label for="auctionID">Auction ID</label>
@@ -26,7 +26,7 @@
 				</form>
 			</th>
             <th style="text-align:left;vertical-align:top;border:none;padding-right:50px;">
-	            <form action="findauctions_makerandmodel" method="post">
+	            <form action="findauctions_makerandmodel?currentUserID=<%= request.getParameter("currentUserID") %>" method="post">
 					<h3>Search for Auctions by Maker and Model</h3>
 					<p>
 						<label for="maker">Maker</label>
@@ -42,7 +42,7 @@
 				</form>
 			</th>
             <th style="text-align:left;vertical-align:top;border:none;padding-right:50px;">
-            	<form action="findauctions_maxbidprice" method="post">
+            	<form action="findauctions_maxbidprice?currentUserID=<%= request.getParameter("currentUserID") %>" method="post">
 					<h3>Search for Auctions Between Bid Price Range</h3>
 					<p>
 						<label for="lower">Bid Price Lower Limit</label>
@@ -61,7 +61,7 @@
         </tr>
     </table>
 
-	<form action="special_search" method="post">
+	<form action="special_search?currentUserID=<%= request.getParameter("currentUserID") %>" method="post">
 		<h3>Specialized Recommendation</h3>
 		<p>
 			<input type="submit" name="button1" value="Successful/Closed Auctions" style="margin-right:35px"/>
@@ -75,9 +75,11 @@
 	<br/>
 	<div id="auctionCreate"><a href="auctioncreate">Create Auction</a></div>
 	<div id="carCreate"><a href="carcreate">Create Car</a></div>
-	<div><a href="findusers?userid=<c:out value="${0}"/>">Back to User Page</a></div>
-	<div><a href="home">Back to Home Page</a></div>
-	<br/>
+	<div><a href="WebsiteHomePage.jsp">Back to Home Page</a></div>
+	</br>
+	<form action="userloginpage?userID=<%= request.getParameter("currentUserID") %>" method="post">
+		<input type="submit" name="userloginpage" value="Return to Current User Page" style="margin-right:35px"/>
+	</form>
 	<h1>Auction Results</h1>
         <table border="1">
             <tr>
@@ -109,11 +111,10 @@
             </tr>
             <c:forEach items="${auctionsAndCars}" var="pair" >
                 <tr>
-                	<td><a href="findbids?auctionid=<c:out value="${pair.getT().getAuctionID()}"/>"><c:out value="${pair.getT().getAuctionID()}" /></a></td>
+                	<td><a href="findbids?currentUserID=<%= request.getParameter("currentUserID") %>&auctionid=<c:out value="${pair.getT().getAuctionID()}"/>"><c:out value="${pair.getT().getAuctionID()}" /></a></td>
                     <td><c:out value="${pair.getT().getTitle()}" /></td>
                     <td><fmt:formatDate value="${pair.getT().getStartTime()}" pattern="yyyy-MM-dd"/></td>
                     <td><fmt:formatDate value="${pair.getT().getEndTime()}" pattern="yyyy-MM-dd"/></td>
-                    <%-- <td><a href="finduser?userid=<c:out value="${pair.getT().getUser().getUserID()}"/>"><c:out value="${pair.getT().getUser().getUserID()}" /></a></td> --%>
                     <td><c:out value="${pair.getT().getCar().getCarID()}" /></td>
                     <td><c:out value="${pair.getT().getUser().getUserID()}" /></td>
                     <td><c:out value="${pair.getT().getHighlights()}" /></td>
@@ -121,8 +122,7 @@
                     <td><c:out value="${pair.getT().getMinimumPrice()}" /></td>
                     <td><c:out value="${pair.getT().getCurrentHighestPrice()}" /></td>
                     <td><c:out value="${pair.getT().getAuctionStatus().name()}" /></td>
-                    <%-- <td><a href="findcustomerservice?customerserviceid=<c:out value="${pair.getT().getCustomerService().getCustomerServiceID()}"/>"><c:out value="${pair.getT().getCustomerService().getCustomerServiceID()}" /></a></td> --%>
-                	<td><c:out value="${pair.getT().getCustomerService().getCustomerServiceID()}" /></td>
+                    <td><c:out value="${pair.getT().getCustomerService().getCustomerServiceID()}" /></td>
                 	<td><c:out value="${pair.getU().getYear()}" /></td>
                 	<td><c:out value="${pair.getU().getMaker()}" /></td>
                 	<td><c:out value="${pair.getU().getModel()}" /></td>
@@ -139,5 +139,7 @@
                 </tr>
             </c:forEach>
        </table>
+       </br>
+       
 </body>
 </html>
