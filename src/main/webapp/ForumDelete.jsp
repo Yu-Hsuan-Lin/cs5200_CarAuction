@@ -22,7 +22,7 @@
 		
 		<p>
 			<span id="submitButton" <c:if test="${messages.disableSubmit}">style="display:none"</c:if>>
-			<input type="submit">
+			<input type="submit" value="submit">
 			</span>
 		</p>
 	</form>
