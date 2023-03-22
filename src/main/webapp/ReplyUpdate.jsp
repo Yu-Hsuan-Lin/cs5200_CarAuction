@@ -23,7 +23,7 @@
 		</p>
 	
 		<p>
-			<input type="submit">
+			<input type="submit" value="submit">
 		</p>
 	</form>
 	<br/><br/>

@@ -23,7 +23,7 @@
 			<input id="newnameoncard" name="newnameoncard" value="">
 		</p>
 		<p>
-			<input type="submit">
+			<input type="submit" value="submit">
 		</p>
 	</form>
 	<br/><br/>

@@ -19,7 +19,7 @@
 		</p>
 		
 		<p>
-			<input type="submit">
+			<input type="submit" value="submit">
 			<br/><br/><br/>
 			<span id="successMessage"><b>${messages.success}</b></span>
 		</p>

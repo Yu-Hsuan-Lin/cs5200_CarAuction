@@ -21,7 +21,7 @@
 							<input id="auctionID" name="auctionID" value="${fn:escapeXml(param.auctionID)}">
 						</p>
 						<p>
-							<input type="submit">
+							<input type="submit" value="submit">
 						</p>
 				</form>
 			</th>
@@ -37,7 +37,7 @@
 						<input id="model" name="model" value="${fn:escapeXml(param.model)}">
 					</p>
 					<p>
-						<input type="submit">
+						<input type="submit" value="submit">
 					</p>
 				</form>
 			</th>

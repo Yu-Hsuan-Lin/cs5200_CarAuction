@@ -19,7 +19,7 @@
 			<input id="customerServiceID" name="customerServiceID" value="${fn:escapeXml(param.firstname)}">
 		</p>
 		<p>
-			<input type="submit">
+			<input type="submit" value="submit">
 			<br/><br/><br/>
 			<span id="successMessage"><b>${messages.success}</b></span>
 		</p>
