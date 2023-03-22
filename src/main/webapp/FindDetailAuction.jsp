@@ -30,63 +30,114 @@
 	</form>
 	<h1>Current Auction</h1>
         <table border="1">
-            <tr>
-                <th>AuctionID</th>
-                <th>Title</th>
-                <th>StartTime</th>
-                <th>EndTime</th>
-                <th>CarID</th>
-                <th>UserID</th>
-                <th>Highlights</th>
-                <th>Pictures</th>
-                <th>StartPrice</th>
-                <th>CurrentPrice</th>
-                <th>AuctionStatus</th>
-                <th>CustomerServiceID</th>
-                <th>Year</th>
-				<th>Maker</th>
-				<th>Model</th>
-				<th>Trim</th>
-				<th>Body</th>
-				<th>Transmission</th>
-				<th>VIN</th>
-				<th>State</th>
-				<th>ConditionScore</th>
-				<th>OdoMeter</th>
-				<th>Color</th>
-				<th>Interior</th>
-				<th>MMR</th>
-            </tr>
             <c:forEach items="${auctionsAndCars}" var="pair" >
                 <tr>
+                
+                </tr>
+                    <th>AuctionID</th>
                 	<td><a href="findbids?currentUserID=<%= request.getParameter("currentUserID") %>&auctionid=<c:out value="${pair.getT().getAuctionID()}"/>"><c:out value="${pair.getT().getAuctionID()}" /></a></td>
-                    <td><c:out value="${pair.getT().getTitle()}" /></td>
+                	<th>Title</th>
+                	<td><c:out value="${pair.getT().getTitle()}" /></td>
+                </tr>
+                
+                <tr>	   
+                	<th>StartTime</th>
                     <td><fmt:formatDate value="${pair.getT().getStartTime()}" pattern="yyyy-MM-dd"/></td>
+                    <th>EndTime</th>
                     <td><fmt:formatDate value="${pair.getT().getEndTime()}" pattern="yyyy-MM-dd"/></td>
+               </tr>
+                
+                <tr>     
                     <%-- <td><a href="finduser?userid=<c:out value="${pair.getT().getUser().getUserID()}"/>"><c:out value="${pair.getT().getUser().getUserID()}" /></a></td> --%>
+                    <th>CarID</th>
                     <td><c:out value="${pair.getT().getCar().getCarID()}" /></td>
+                     <th>UserID</th>
                     <td><c:out value="${pair.getT().getUser().getUserID()}" /></td>
+               </tr>
+                
+                <tr> 
+                	<th>Highlights</th>     
                     <td><c:out value="${pair.getT().getHighlights()}" /></td>
-                    <td><img src="${pair.getT().getPictures()}" alt="carPicture"></img></td>
+                    <th rowspan="6">Pictures</th>
+                    <td rowspan="6"><img src="${pair.getT().getPictures()}" alt="carPicture"></img></td>
+                </tr>
+                
+                <tr> 
+                	<th>StartPrice</th>
                     <td><c:out value="${pair.getT().getMinimumPrice()}" /></td>
+                </tr>
+                
+                <tr> 
+                 	<th>CurrentPrice</th>
                     <td><c:out value="${pair.getT().getCurrentHighestPrice()}" /></td>
+                 </tr>
+                
+                <tr> 
+                	<th>AuctionStatus</th>
                     <td><c:out value="${pair.getT().getAuctionStatus().name()}" /></td>
+                 </tr>
+                
+                
+                
+                <tr> 
+                	<th>CustomerServiceID</th>
                     <%-- <td><a href="findcustomerservice?customerserviceid=<c:out value="${pair.getT().getCustomerService().getCustomerServiceID()}"/>"><c:out value="${pair.getT().getCustomerService().getCustomerServiceID()}" /></a></td> --%>
                 	<td><c:out value="${pair.getT().getCustomerService().getCustomerServiceID()}" /></td>
+                 </tr>
+                
+                <tr> 
+                	<th>Year</th>
                 	<td><c:out value="${pair.getU().getYear()}" /></td>
+                	
+                </tr>
+                
+                <tr> 
+                	<th>Maker</th>
                 	<td><c:out value="${pair.getU().getMaker()}" /></td>
+                	<th>Model</th>
                 	<td><c:out value="${pair.getU().getModel()}" /></td>
+                	
+                </tr>
+                
+                <tr> 
+                	<th>Trim</th>
                 	<td><c:out value="${pair.getU().getTrim()}" /></td>
+                	<th>Body</th>
                 	<td><c:out value="${pair.getU().getBody()}" /></td>
+                	
+                </tr>
+                
+                <tr> 
+                	<th>Transmission</th>
                 	<td><c:out value="${pair.getU().getTransmission()}" /></td>
+                	<th>VIN</th>
                 	<td><c:out value="${pair.getU().getVIN()}" /></td>
+                	
+                </tr>
+                
+                <tr> 
+                	<th>State</th>
                 	<td><c:out value="${pair.getU().getState()}" /></td>
+                	<th>ConditionScore</th>
                 	<td><c:out value="${pair.getU().getConditionScore()}" /></td>
+                	
+                </tr>
+                
+                <tr> 
+                	<th>OdoMeter</th>
                 	<td><c:out value="${pair.getU().getOdoMeter()}" /></td>
+               		<th>Color</th>
                 	<td><c:out value="${pair.getU().getColor()}" /></td>
+                	
+                </tr>
+                
+                <tr> 
+               	    <th>Interior</th>
                 	<td><c:out value="${pair.getU().getInterior()}" /></td>
+                	<th>MMR</th>
                 	<td><c:out value="${pair.getU().getMMR()}" /></td>
                 </tr>
+                
             </c:forEach>
        </table>
 	<h1>Bid history for current Auction</h1>

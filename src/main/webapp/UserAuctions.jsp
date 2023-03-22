@@ -29,7 +29,7 @@
             </tr>
             <c:forEach items="${auctions}" var="auction" >
                 <tr>
-                    <td><a href="findbids?currentUserID=<%= request.getParameter("currentUserID") %>&auctionid=<c:out value="${auction.getAuctionID()}"/>"><c:out value="${auction.getAuctionID()}" /></a></td>
+                    <td><a href="findbids?currentUserID=<%= request.getParameter("userID") %>&auctionid=<c:out value="${auction.getAuctionID()}"/>"><c:out value="${auction.getAuctionID()}" /></a></td>
                     <td><c:out value="${auction.getTitle()}" /></td>
                     <td><c:out value="${auction.getStartTime()}" /></td>
                     <td><c:out value="${auction.getEndTime()}" /></td>
