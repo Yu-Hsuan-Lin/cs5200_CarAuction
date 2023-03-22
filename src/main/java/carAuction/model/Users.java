@@ -169,4 +169,8 @@ public class Users {
 	public void setSignUp(Date SignUp) {
 		this.SignUp = SignUp;
 	}
+	
+	public Users(String  Email) {
+		this.Email = Email;
+	}
 }

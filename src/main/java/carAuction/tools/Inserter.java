@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class Inserter {
@@ -32,6 +33,18 @@ public class Inserter {
 									"user3 Address2", "user3 City", "WA",
 									"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
 		user3 = usersDao.create(user3);
+		Users user4 = new Users("first3", "last4", "user3 Address1", 
+				"user3 Address2", "user3 City", "WA",
+				"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
+		Users user5 = new Users("first3", "last5", "user3 Address1", 
+				"user3 Address2", "user3 City", "WA",
+				"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
+		Users user6 = new Users("first3", "last6", "user3 Address1", 
+				"user3 Address2", "user3 City", "WA",
+				"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
+		user4 = usersDao.create(user4);
+		user5 = usersDao.create(user5);
+		user6 = usersDao.create(user6);
 		
         
 		CreditCards creditCard1 = new CreditCards("403003344455", user1, 3, 2026, "user1", "00000");
@@ -49,6 +62,10 @@ public class Inserter {
 			u1.getAddress1(), u1.getAddress2(), u1.getCity(),
 			u1.getState(), u1.getZipcode(), u1.getCountry(),
 			u1.getPhone(), u1.getEmail(), u1.getpassword(), u1.getSignUp());
+		List<Users> us = usersDao.getUsersFromFirstName("first3");
+		for (Users u : us) {
+			System.out.format("Reading lastName:%s \n", u.getLastName());
+		}
 	
 		CreditCards cd1 = creditCardsDao.getCreditCardByCardNumber("403003344455");
 		List<CreditCards> cdList1 = creditCardsDao.getCreditCardsByUserID(1);
@@ -248,6 +265,29 @@ public class Inserter {
 		
 		
 		// Bid inserter
+		BidsDao bidsDao = BidsDao.getInstance();
+		// Bid inserter
+		Bids bid1 = new Bids(auctionsDao.getAuctionById(1), user1,  new SimpleDateFormat("yyyy-mm-dd HH:MM:ss").parse("2015-02-17 04:30:00"), 41000F);
+		Bids bids1 = bidsDao.create(bid1);
+		System.out.println(bids1.getBidID());
+		Bids b1 = bidsDao.getBidById(1);
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		b1.getBidID(), b1.getAuction().getAuctionID(), b1.getUser().getUserID(), b1.getBidTime(), b1.getBidPrice());
+		List<Bids> b2 = bidsDao.getBidsForAuction(bid1.getAuction());
+		for (Bids bid : b2) {
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		bid.getBidID(), bid.getAuction().getAuctionID(), bid.getUser().getUserID(), bid.getBidTime(), bid.getBidPrice());
+		}
+		List<Bids> b3 = bidsDao.getBidsForUser(bid1.getUser());
+		for (Bids bid : b3) {
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		bid.getBidID(), bid.getAuction().getAuctionID(), bid.getUser().getUserID(), bid.getBidTime(), bid.getBidPrice());
+		}
+		Bids b4 = bidsDao.updateBidPrice(bid1, 42000F);
+		System.out.format("Reading Bid: BidID:%s, AuctionID:%s, UserID:%s, BidTime:%s, BidPrice:%s \n ",
+		b4.getBidID(), b4.getAuction().getAuctionID(), b4.getUser().getUserID(), b4.getBidTime(), b4.getBidPrice());
+		// bidsDao.delete(bid1);
+
 		
 		// ChatHistory inserter
 		
@@ -268,7 +308,7 @@ public class Inserter {
 		Forums Forum4 = new Forums(auction4, user2, date, "Forum4 content ............");
 		Forum4 = ForumssDao.create(Forum4);
 		
-		Forums Forum5 = new Forums(auction4, user3, date, "Forum5 content ............");
+		Forums Forum5 = new Forums(auction5, user3, date, "Forum5 content ............");
 		Forum5 = ForumssDao.create(Forum5);
 
 		
@@ -332,6 +372,12 @@ public class Inserter {
 			System.out.format("Looping Reply:  ID:%s, ForumsID:%s,  UserID:%s,  Time:%s,  Content:%s   \n ",
 					r.getReplyID(), r.getForum().getForumID(), r.getUser().getUserID(), r.getTimeStamp(), r.getContent());
 		}
+		List<HashMap<String, String>> ans1 = bidsDao.getHighestBids();
+		System.out.println(ans1);
+		
+//		List<HashMap<String, String>> ans = bidsDao.getHighestBidsByAuctionID(auction1);
+//		System.out.println(ans);
+//		System.out.println(auction1.getAuctionID());
 		
 		
 		System.out.println();

@@ -62,6 +62,11 @@ public class Cars {
 		this.user = user;
 	}
 	
+	public Cars(int carID) {
+		super();
+		this.CarID = carID;
+	}
+	
 	public int getCarID() {
 		return this.CarID;
 	}

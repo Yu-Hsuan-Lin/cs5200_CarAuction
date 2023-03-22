@@ -63,6 +63,10 @@ public class Auctions {
 		this.customerService = customerService;
 	}
 	
+	public Auctions(int auctionID) {
+		this.AuctionID = auctionID;
+	}
+	
 	public Auctions(Cars car, Users user, CustomerServices customerService) {
 		this.car = car;
 		this.user = user;

@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.SQLException;
 
 
@@ -37,6 +39,15 @@ public class CustomerServicesDao {
 			insertStmt.setString(1, customerServices.getFirstName());
 			insertStmt.setString(2, customerServices.getLastName());
 			insertStmt.executeUpdate();
+			// Retrieve the auto-generated key and set it, so it can be used by the caller.
+			resultKey = insertStmt.getGeneratedKeys();
+			int customerServiceID = -1;
+			if(resultKey.next()) {
+				customerServiceID = resultKey.getInt(1);
+			} else {
+				throw new SQLException("Unable to retrieve auto-generated key.");
+			}
+			customerServices.setCustomerServiceID(customerServiceID);
 			return customerServices;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -120,6 +131,40 @@ public class CustomerServicesDao {
 			}
 		}
 		return null;
+	}
+	
+	// zephyr
+	public List<Integer> getKeyRange() throws SQLException {
+		List<Integer> keyRange = new ArrayList<>();
+		String selectCustomerService =
+				"SELECT CustomerServiceID " +
+				"FROM CustomerServices ";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCustomerService);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				Integer customerServiceID = results.getInt("CustomerServiceID");
+				keyRange.add(customerServiceID);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return keyRange;
 	}
 
 }
