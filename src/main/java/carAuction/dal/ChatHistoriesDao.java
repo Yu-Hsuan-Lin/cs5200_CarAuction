@@ -166,4 +166,62 @@ import carAuction.model.*;
 		}
 		return chatHistories;
 	}
+	
+	public List<ChatHistories> getChatHistoriesByCustomerServiceID (int customerServiceID) throws SQLException {
+		List<ChatHistories> chatHistories = new ArrayList<ChatHistories>();
+
+		String selectChatHistories =
+				"SELECT ChatID, CustomerServiceID, UserID, TimeStamp, ServiceType FROM ChatHistories WHERE UserID=?;";
+
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		CustomerServicesDao customerServicesDao = CustomerServicesDao.getInstance();
+		UsersDao usersDao = UsersDao.getInstance();
+		CustomerServices cs1 = customerServicesDao.getCustomerServiceById(customerServiceID);
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectChatHistories);
+			selectStmt.setInt(1, customerServiceID);
+			results = selectStmt.executeQuery();
+
+
+			while(results.next()) {
+				int ChatID = results.getInt("ChatID");
+
+				Users user = usersDao.getUserFromUserID((results.getInt("userID")));
+//				CustomerServices customerService = customerServicesDao.
+//						getCustomerServiceById(results.getInt("CustomerServiceID"));
+
+				Date TimeStamp = new Date(results.getTimestamp("TimeStamp").getTime());
+
+				ChatHistories.ServiceTypeValue serviceType =
+						ChatHistories.ServiceTypeValue.valueOf(results.getString("ServiceType"));
+
+
+				ChatHistories chatHistory = new ChatHistories(ChatID,cs1, user,
+						TimeStamp, serviceType);
+
+				chatHistories.add(chatHistory);
+
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return chatHistories;
+	}
 }
+
+
