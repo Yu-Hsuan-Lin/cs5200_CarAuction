@@ -62,6 +62,7 @@ public class UserCreditCards extends HttpServlet {
         	
         	req.setAttribute("creditCards", creditCards);
             req.setAttribute("user", user);
+            
         } catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);

@@ -8,17 +8,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Update NameOnCard</title>
+<title>Update Price Alert</title>
 </head>
 <body>
-	<h1>Enter Your New Name On Card Below</h1>
+	<h1>Update Your New Price Alert Below</h1>
 	
-	<form action="creditcardupdate?cardNumber=<%= request.getParameter("cardNumber") %>" method="post">
+	<form action="collectionupdate?CollectionId=<%= request.getParameter("CollectionId") %>" method="post">
 
 		<p>
-			<label for="newnameoncard">New Name On Card</label>
-			<input id="newnameoncard" name="newnameoncard" value="">
-		</p>
+			<label for="newPriceAlert">newPriceAlert(true or false)</label>
+			<input id="newPriceAlert" name="newPriceAlert" value="">
+		</p> 
 		
 		<p>
 			<input type="submit" value="submit">

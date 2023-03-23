@@ -3,7 +3,7 @@ package carAuction.model;
 import java.util.Date;
 
 public class Collections {
-  protected int CollectionId;
+  protected int collectionId;
   protected Users user;
   protected Auctions auction;
   protected Boolean PriceChangeAlert;
@@ -11,7 +11,7 @@ public class Collections {
 
   public Collections(int collectionId, Users user, Auctions auction, Boolean priceChangeAlert,
       Boolean statusChangeAlert) {
-    this.CollectionId = collectionId;
+    this.collectionId = collectionId;
     this.user = user;
     this.auction = auction;
     this.PriceChangeAlert = priceChangeAlert;
@@ -27,22 +27,22 @@ public class Collections {
 	  }
   
   public Collections(int collectionId, Users user, Auctions auction) {
-    this.CollectionId = collectionId;
+    this.collectionId = collectionId;
     this.user = user;
     this.auction = auction;
   }
   
   public Collections(int collectionId) {
-	    this.CollectionId = collectionId;
+	    this.collectionId = collectionId;
 	    
 	  }
 
-  public int getCollectionId() {
-    return this.CollectionId;
+  public int getcollectionId() {
+    return this.collectionId;
   }
 
   public void setCollectionId(int collectionId) {
-    this.CollectionId = collectionId;
+    this.collectionId = collectionId;
   }
 
   public Users getuser() {

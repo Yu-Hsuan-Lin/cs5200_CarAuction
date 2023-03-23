@@ -73,7 +73,7 @@ public class CollectionsDao {
       connection = connectionManager.getConnection();
       updateStmt = connection.prepareStatement(updateCollection);
       updateStmt.setBoolean(1, newPriceChangeAlert);
-      updateStmt.setInt(2, collection.getCollectionId());
+      updateStmt.setInt(2, collection.getcollectionId());
       updateStmt.executeUpdate();
 
       // Update the blogComment param before returning to the caller.
@@ -99,7 +99,7 @@ public class CollectionsDao {
     try {
       connection = connectionManager.getConnection();
       deleteStmt = connection.prepareStatement(deleteCollection);
-      deleteStmt.setInt(1, collection.getCollectionId());
+      deleteStmt.setInt(1, collection.getcollectionId());
       deleteStmt.executeUpdate();
 
       // Return null so the caller can no longer operate on the BlogComments instance.
@@ -118,48 +118,46 @@ public class CollectionsDao {
   }
 
   public Collections getCollectionById(int CollectionId) throws SQLException {
-    String selectCollection =
-        "SELECT CollectionId,UserID,AuctionID,PriceChangeAlert,StatusChangeAlert " +
-            "FROM Collections " +
-            "WHERE CollectionId = ?;";
-    Connection connection = null;
-    PreparedStatement selectStmt = null;
-    ResultSet results = null;
-    AuctionsDao auctionsDao = AuctionsDao.getInstance();
-	UsersDao usersDao = UsersDao.getInstance();
-    try {
-      connection = connectionManager.getConnection();
-      selectStmt = connection.prepareStatement(selectCollection);
-      selectStmt.setInt(1, CollectionId);
-      results = selectStmt.executeQuery();
+	    String selectCollection =
+	        "SELECT CollectionId,UserID,AuctionID,PriceChangeAlert,StatusChangeAlert FROM Collections WHERE CollectionId = 1;";
+	    Connection connection = null;
+	    PreparedStatement selectStmt = null;
+	    ResultSet results = null;
+	    AuctionsDao auctionsDao = AuctionsDao.getInstance();
+		UsersDao usersDao = UsersDao.getInstance();
+	    try {
+	      connection = connectionManager.getConnection();
+	      selectStmt = connection.prepareStatement(selectCollection);
+//	      selectStmt.setInt(1, CollectionId);
+	      results = selectStmt.executeQuery();
 
-      if(results.next()) {
-        int resultCollectionId = results.getInt("CollectionId");
-        Auctions auction = auctionsDao.getAuctionById(results.getInt("AuctionID"));
-		Users user = usersDao.getUserFromUserID(results.getInt("UserID"));
-        Boolean PriceChangeAlert = results.getBoolean("PriceChangeAlert");
-        Boolean StatusChangeAlert = results.getBoolean("StatusChangeAlert");
+	      if(results.next()) {
+	        int resultCollectionId = results.getInt("CollectionId");
+	        Auctions auction = auctionsDao.getAuctionById(results.getInt("AuctionID"));
+			Users user = usersDao.getUserFromUserID(results.getInt("UserID"));
+	        Boolean PriceChangeAlert = results.getBoolean("PriceChangeAlert");
+	        Boolean StatusChangeAlert = results.getBoolean("StatusChangeAlert");
 
-        Collections collection = new Collections(resultCollectionId, user,
-            auction, PriceChangeAlert, StatusChangeAlert);
-        return collection;
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw e;
-    } finally {
-      if(connection != null) {
-        connection.close();
-      }
-      if(selectStmt != null) {
-        selectStmt.close();
-      }
-      if(results != null) {
-        results.close();
-      }
-    }
-    return null;
-  }
+	        Collections collection = new Collections(resultCollectionId, user,
+	            auction, PriceChangeAlert, StatusChangeAlert);
+	        return collection;
+	      }
+	    } catch (SQLException e) {
+	      e.printStackTrace();
+	      throw e;
+	    } finally {
+	      if(connection != null) {
+	        connection.close();
+	      }
+	      if(selectStmt != null) {
+	        selectStmt.close();
+	      }
+	      if(results != null) {
+	        results.close();
+	      }
+	    }
+	    return null;
+	  }
   
 	public List<Collections> getCollectionForUser(Users user) throws SQLException {
 		List<Collections> Collections = new ArrayList<Collections>();

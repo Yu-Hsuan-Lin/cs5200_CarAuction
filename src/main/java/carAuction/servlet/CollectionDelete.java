@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CollectionDelete extends HttpServlet {
 	
 	protected CollectionsDao collectionsDao;
+
 	
 	@Override
 	public void init() throws ServletException {

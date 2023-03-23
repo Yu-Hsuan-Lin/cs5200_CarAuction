@@ -36,7 +36,7 @@ public class UserPasswordUpdate extends HttpServlet {
         String userID = req.getParameter("userID");
         String password = req.getParameter("password");
         if (password == null || password.trim().isEmpty()) {
-            messages.put("success", "Please enter a valid userID.");
+            messages.put("success", "Please enter a valid password.");
         } else {
         	try {
         		Users user = usersDao.getUserFromUserID(Integer.parseInt(userID));
