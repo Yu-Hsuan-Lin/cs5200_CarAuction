@@ -19,20 +19,19 @@
             <th>AuctionID</th>
             <th>PriceChangeAlert</th>
             <th>StatusChangeAlert</th>
-           <!--  <th>Update PriceChangeAlert</th>
-            <th>Update StatusChangeAlert</th> -->
+            <th>Update PriceChangeAlert</th>
             <th>Delete Record</th>
      
             </tr>
             <c:forEach items="${collections}" var="collection" >
                 <tr>
+                    
                     <td><c:out value="${collection.getCollectionId()}" /></td>
                     <td><c:out value="${collection.getauction().getAuctionID()}" /></td>
                     <td><c:out value="${collection.getPriceChangeAlert()}" /></td>
                     <td><c:out value="${collection.getStatusChangeAlert()}" /></td>
-<%--                     <td><a href="collection_PriceChangeAlert_update?collectionid=<c:out value="${user.getCollectionId()}"/>">Update PriceChangeAlert</a></td>
-                    <td><a href="collection_StatusChangeAlert_update?collectionid=<c:out value="${user.getCollectionId()}"/>">Update StatusChangeAlert</a></td>
- --%>                    <td><a href="collectiondelete?collectionID=<c:out value="${collection.getCollectionId()}"/>">Delete</a></td>
+                    <td><a href="collectionupdate?collectionID=<c:out value="${collection.getCollectionId()}"/>">Update</a></td>
+				    <td><a href="collectiondelete?collectionID=<c:out value="${collection.getCollectionId()}"/>">Delete</a></td>
                 </tr>
             </c:forEach>
        </table>

@@ -121,7 +121,8 @@ public class CollectionsDao {
     String selectCollection =
         "SELECT CollectionId,UserID,AuctionID,PriceChangeAlert,StatusChangeAlert " +
             "FROM Collections " +
-            "WHERE CollectionId = ?;";
+//            "WHERE CollectionId = ?;";
+    		"WHERE CollectionId = 1;";
     Connection connection = null;
     PreparedStatement selectStmt = null;
     ResultSet results = null;
@@ -130,7 +131,7 @@ public class CollectionsDao {
     try {
       connection = connectionManager.getConnection();
       selectStmt = connection.prepareStatement(selectCollection);
-      selectStmt.setInt(1, CollectionId);
+//      selectStmt.setInt(1, CollectionId);
       results = selectStmt.executeQuery();
 
       if(results.next()) {
