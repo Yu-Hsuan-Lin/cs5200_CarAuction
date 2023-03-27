@@ -15,7 +15,7 @@
 <table border="1" style="border:none;">
         <tr>
             <th style="text-align:left;vertical-align:top;border:none;padding-right:80px;">
-	            <form action="SearchChatHistoryByCustomerServiceID" method="post">
+	            <form action="findchathistories" method="post">
 					<h3>Search ChatHistory By Customer Service ID</h3>
 						<p>
 							<label for="customerServiceID">Customer Service ID</label>
@@ -44,15 +44,14 @@
 
 	
 	    </tr>
-	    <c:forEach items="${chatHistories}" var="chatHistories" >
+	    <c:forEach items="${chatHistories}" var="chatHistory" >
 	        <tr>
-	            <td><c:out value="${chatHistories.getChatID()}" /></td>
-	            <td><c:out value="${chatHistories.getAuction().getAuctionID()}" /></td>
-	            <td><c:out value="${chatHistories.getUser().getUserID()}" /></td>
-	            <td><fmt:formatDate value="${chatHistories.getTimeStamp()}" pattern="MM-dd-yyyy hh:mm:sa"/></td>
-	            <td><c:out value="${chatHistories.getServiceType()}" /></td>
-	            
-	            
+	            <td><c:out value="${chatHistory.getChatID()}" /></td>
+	            <td><c:out value="${chatHistory.getCustomerService().getCustomerServiceID()}" /></td>
+	            <td><c:out value="${chatHistory.getUser().getUserID()}" /></td>
+	            <td><fmt:formatDate value="${chatHistory.getTimeStamp()}" pattern="MM-dd-yyyy hh:mm:sa"/></td>
+	            <td><c:out value="${chatHistory.getServiceType()}" /></td>
+
 	        </tr>
 	    </c:forEach>
 	</table>

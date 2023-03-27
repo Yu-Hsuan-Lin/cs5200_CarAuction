@@ -171,7 +171,7 @@ import carAuction.model.*;
 		List<ChatHistories> chatHistories = new ArrayList<ChatHistories>();
 
 		String selectChatHistories =
-				"SELECT ChatID, CustomerServiceID, UserID, TimeStamp, ServiceType FROM ChatHistories WHERE UserID=?;";
+				"SELECT ChatID, CustomerServiceID, UserID, TimeStamp, ServiceType FROM ChatHistories WHERE CustomerServiceID=?;";
 
 		Connection connection = null;
 		PreparedStatement selectStmt = null;

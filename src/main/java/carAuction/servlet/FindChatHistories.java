@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 
-@WebServlet("/findchathistories ")
+@WebServlet("/findchathistories")
 public class FindChatHistories extends HttpServlet {
 	
 	protected ChatHistoriesDao chatHistoriesDao;
@@ -85,7 +85,7 @@ public class FindChatHistories extends HttpServlet {
         
         req.setAttribute("chatHistories",chatHistories);
         
-        req.getRequestDispatcher("/findchathistories.jsp").forward(req, resp);
+        req.getRequestDispatcher("/FindChatHistories.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -117,6 +117,6 @@ public class FindChatHistories extends HttpServlet {
         }
         req.setAttribute("chatHistories", chatHistories);
         
-        req.getRequestDispatcher("/FindAuctions.jsp").forward(req, resp);
+        req.getRequestDispatcher("/FindChatHistories.jsp").forward(req, resp);
     }
 }
