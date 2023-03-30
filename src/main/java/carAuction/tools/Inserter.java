@@ -15,7 +15,7 @@ public class Inserter {
 		// Users and CreditCards inserter
 		UsersDao usersDao = UsersDao.getInstance();
 		CreditCardsDao creditCardsDao = CreditCardsDao.getInstance();
-		
+	
 		
 		// INSERT objects from our model.
 		Users user1 = new Users("first1", "last1", "user1 Address1", 
