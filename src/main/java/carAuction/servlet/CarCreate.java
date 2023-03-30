@@ -89,7 +89,7 @@ public class CarCreate extends HttpServlet {
         	
 	        try {
 	        	// Exercise: parse the input for StatusLevel.
-	        	Cars car = new Cars(usersDao.getUserFromCarId(userId),year,maker,model,trim,body,transmission,vin,state,conditionScore,odoMeter,color,interior,mmr);
+	        	Cars car = new Cars(usersDao.getUserFromUserID(userId),year,maker,model,trim,body,transmission,vin,state,conditionScore,odoMeter,color,interior,mmr);
 				car = carsDao.create(car);
 	        	messages.put("success", "Successfully created Car with ID: " + car.getCarID());
 	        } catch (SQLException e) {

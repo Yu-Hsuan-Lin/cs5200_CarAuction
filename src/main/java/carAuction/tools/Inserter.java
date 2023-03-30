@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class Inserter {
@@ -21,30 +20,18 @@ public class Inserter {
 		// INSERT objects from our model.
 		Users user1 = new Users("first1", "last1", "user1 Address1", 
 				                    "user1 Address2", "user1 City", "WA",
-				                    "00000", "US", "user1@northeastern.edu", "***123", "000-000-0000", new Date(125, 9, 3));
+				                    "00000", "US", "000-000-0000", "user1@northeastern.edu", "***123",  new Date(125, 9, 3));
 		user1 = usersDao.create(user1);
 		
 		Users user2 = new Users( "first2", "last2", "user2 Address1", 
                 					"user2 Address2", "user2 City2", "WA",
-                					"00000", "US", "user2@northeastern.edu", "***456", "000-000-0000", new Date(105, 3, 20));
+                					"00000", "US", "000-000-0000", "user2@northeastern.edu", "***456", new Date(105, 3, 20));
 		user2 = usersDao.create(user2);
 		
 		Users user3 = new Users("first3", "last3", "user3 Address1", 
 									"user3 Address2", "user3 City", "WA",
-									"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
+									"00000", "US", "000-000-0000", "user3@northeastern.edu", "***789", new Date(110, 0, 17));
 		user3 = usersDao.create(user3);
-		Users user4 = new Users("first3", "last4", "user3 Address1", 
-				"user3 Address2", "user3 City", "WA",
-				"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
-		Users user5 = new Users("first3", "last5", "user3 Address1", 
-				"user3 Address2", "user3 City", "WA",
-				"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
-		Users user6 = new Users("first3", "last6", "user3 Address1", 
-				"user3 Address2", "user3 City", "WA",
-				"00000", "US", "user3@northeastern.edu", "***789", "000-000-0000", new Date(110, 0, 17));
-		user4 = usersDao.create(user4);
-		user5 = usersDao.create(user5);
-		user6 = usersDao.create(user6);
 		
         
 		CreditCards creditCard1 = new CreditCards("403003344455", user1, 3, 2026, "user1", "00000");
@@ -62,10 +49,6 @@ public class Inserter {
 			u1.getAddress1(), u1.getAddress2(), u1.getCity(),
 			u1.getState(), u1.getZipcode(), u1.getCountry(),
 			u1.getPhone(), u1.getEmail(), u1.getpassword(), u1.getSignUp());
-		List<Users> us = usersDao.getUsersFromFirstName("first3");
-		for (Users u : us) {
-			System.out.format("Reading lastName:%s \n", u.getLastName());
-		}
 	
 		CreditCards cd1 = creditCardsDao.getCreditCardByCardNumber("403003344455");
 		List<CreditCards> cdList1 = creditCardsDao.getCreditCardsByUserID(1);
@@ -372,16 +355,79 @@ public class Inserter {
 			System.out.format("Looping Reply:  ID:%s, ForumsID:%s,  UserID:%s,  Time:%s,  Content:%s   \n ",
 					r.getReplyID(), r.getForum().getForumID(), r.getUser().getUserID(), r.getTimeStamp(), r.getContent());
 		}
-		List<HashMap<String, String>> ans1 = bidsDao.getHighestBids();
-		System.out.println(ans1);
-		
-//		List<HashMap<String, String>> ans = bidsDao.getHighestBidsByAuctionID(auction1);
-//		System.out.println(ans);
-//		System.out.println(auction1.getAuctionID());
 		
 		
 		System.out.println();
 		
+		// ChatHistories and Collections inserter
+		
+		ChatHistoriesDao chatHistoryDao = ChatHistoriesDao.getInstance();
+	    CollectionsDao collectionDao = CollectionsDao.getInstance();
+
+
+	     
+	    ChatHistories chatHistory1 = new ChatHistories(cs1,user1,
+	    		date, ChatHistories.ServiceTypeValue.Account);
+	    
+	    chatHistory1 = chatHistoryDao.create(chatHistory1);
+
+	    ChatHistories chatHistory2 = new ChatHistories(cs2,user2,
+	    		date, ChatHistories.ServiceTypeValue.Legal);
+	    
+	    
+	    chatHistory2 = chatHistoryDao.create(chatHistory2);
+
+	    ChatHistories chatHistory3= new ChatHistories(cs2,user3,
+	    		date, ChatHistories.ServiceTypeValue.Auction);
+	    
+	    chatHistory3 = chatHistoryDao.create(chatHistory3);
+
+	    Collections collection1 = new Collections(user1,auction1,
+	        true,true);
+	    collection1 = collectionDao.create(collection1);
+
+	    Collections collection2 = new Collections(user2,auction2,
+	        true,true);
+	    collection2 = collectionDao.create(collection2);
+
+	    Collections collection3 = new Collections(user3,auction3,
+	        false,false);
+	    collection3 = collectionDao.create(collection3);
+
+
+	    // READ.
+	    
+	    
+	    List<ChatHistories> ChatHistoriesSeachForUser = chatHistoryDao.getChatHistoriesByUserID(user1.getUserID());
+	    
+	    for(ChatHistories ch : ChatHistoriesSeachForUser) {
+			System.out.format("ChatHistory seached for User: ChatID:%s CustomerServiceID:%s UserID:%s "
+					+ " Time:%s ServiceType:%s  \n",
+					ch.getChatID(), ch.getCustomerService().getCustomerServiceID(),
+					ch.getUser().getUserID(), ch.getTimeStamp(), ch.getServiceType().name());
+	    }
+	    
+		
+	    ChatHistories c2 = chatHistoryDao.updateServiceType(chatHistory1, ChatHistories.ServiceTypeValue.Other);
+	    System.out.format("Reading ChatHistories:  ChatID:%s   CustomerServiceID:%s"
+	    		+ " UserID:%s Time:%s  ServiceType:%s \n",
+	        c2.getChatID(), c2.getCustomerService().getCustomerServiceID(),
+	        c2.getUser().getUserID(), c2.getTimeStamp(), c2.getServiceType().name());
+
+	    
+	    Collections cl1 = collectionDao.getCollectionById(collection1.getuser().getUserID());
+	    System.out.format("Reading Collections:  CollectionId:%s   UserID:%s  AuctionID:%s "
+	            + "  PriceChangeAlert: %s StatusChangeAlert:%s \n",
+	        cl1.getCollectionId(), cl1.getuser().getUserID(),
+	        cl1.getauction().getAuctionID(), cl1.getPriceChangeAlert(), cl1.getStatusChangeAlert());
+
+	    Collections cl2 = collectionDao.updatePriceChangeAlert(collection3, true);
+	    System.out.format("Reading Collections:   CollectionId:%s   UserID:%s  AuctionID:%s "
+	            + "  PriceChangeAlert:%s StatusChangeAlert:%s \n",
+	        cl2.getCollectionId(), cl1.getuser().getUserID(),
+	        cl1.getauction().getAuctionID(),cl2.getPriceChangeAlert(), cl2.getStatusChangeAlert());
+	    
+	    System.out.println();
 		
 	}
 }
