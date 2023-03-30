@@ -21,15 +21,12 @@
             </tr>
             <c:forEach items="${bids}" var="bid" >
                 <tr>
-                    <td><c:out value="${bid.getAuction().getAuctionID()}" /></td>
+                    <td><a href="findbids?currentUserID=<%= request.getParameter("userID") %>&auctionid=<c:out value="${bid.getAuction().getAuctionID()}"/>"><c:out value="${bid.getAuction().getAuctionID()}" /></a></td>
                     <td><c:out value="${bid.getBidTime()}" /></td>
                     <td><c:out value="${bid.getBidPrice()}" /></td>
                 </tr>
             </c:forEach>
        </table>
-       <p>
-		<a href="bidcreate?userID=<c:out value="${user.getUserID()}"/>">add a new bid</a>
-		</p>
 		<p>
 		<button type="button" name="back" onclick="history.back()">back</button>
 		</p>
